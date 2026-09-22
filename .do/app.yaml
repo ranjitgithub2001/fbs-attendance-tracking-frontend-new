@@ -1,0 +1,18 @@
+name: fbs-attendance-frontend
+region: blr1
+static_sites:
+  - name: web
+    github:
+      repo: ranjitgithub2001/fbs-attendance-tracking-frontend-new
+      branch: main
+      deploy_on_push: false
+    build_command: npm ci && npm run build
+    output_dir: dist
+    catchall_document: index.html
+    envs:
+      - key: NODE_VERSION
+        scope: BUILD_TIME
+        value: "22"
+      - key: VITE_API_URL
+        scope: BUILD_TIME
+        value: "https://REPLACE_WITH_ATTENDANCE_API_ORIGIN/api"
