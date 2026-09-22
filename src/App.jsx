@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext";
 // Auth pages
 import LoginPage from "./pages/LoginPage";
 import RegisterRequest from "./pages/RegisterRequest";
+import ForgotPassword from "./pages/ForgotPassword";
 
 // Route guards
 import PublicRoute from "./components/PublicRoute";
@@ -28,7 +29,6 @@ import TrainerHolidayRequest from "./pages/trainer/TrainerHolidayRequest";
 // Student pages
 import StudentLogin from "./pages/student/StudentLogin";
 import StudentPortal from "./pages/student/StudentPortal";
-
 function RootRedirect() {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
@@ -53,7 +53,14 @@ function App() {
         }
       />
       <Route path="/register-request" element={<RegisterRequest />} />
-      {/* ── Admin routes ── */}
+      <Route
+        path="/forgot-password"
+        element={
+          <PublicRoute>
+            <ForgotPassword />
+          </PublicRoute>
+        }
+      />
       {/* ── Admin routes ── */}
       <Route
         path="/admin/dashboard"

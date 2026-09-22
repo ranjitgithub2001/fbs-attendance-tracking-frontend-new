@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-const BASE = "http://localhost:8080/api";
-
-function studentAxios() {
-  const token = localStorage.getItem("studentToken");
-  return axios.create({
-    baseURL: BASE,
-    headers: { Authorization: `Bearer ${token}` },
-  });
-}
+import studentAxios from "../../api/studentAxios";
 
 function fmtDate(d) {
   if (!d) return "—";
@@ -86,6 +76,7 @@ function StatusBadge({ status }) {
     PRESENT: "bg-fbs-green/10 border-fbs-green/30 text-fbs-green",
     ABSENT: "bg-red-900/10 border-red-700/30 text-red-400",
     LATE: "bg-yellow-900/10 border-yellow-700/30 text-yellow-400",
+    HOLIDAY: "bg-gray-800/40 border-gray-600/30 text-gray-400",
     PENDING: "bg-yellow-900/10 border-yellow-700/30 text-yellow-400",
     RESOLVED: "bg-fbs-green/10 border-fbs-green/30 text-fbs-green",
     REJECTED: "bg-red-900/10 border-red-700/30 text-red-400",
@@ -127,9 +118,9 @@ function AttendanceRing({ pct }) {
       </svg>
       <div className="absolute text-center">
         <p className="text-white text-lg font-bold leading-none">
-          {pct.toFixed(0)}%
+          {Number(pct).toFixed(1)}%
         </p>
-        <p className="text-gray-500 text-[10px]">attended</p>
+        <p className="text-gray-500 text-[10px]">Attendance</p>
       </div>
     </div>
   );
@@ -142,12 +133,16 @@ function DashboardTab({ data }) {
   const absent = sessions.filter((r) => r.status === "ABSENT").length;
   const late = sessions.filter((r) => r.status === "LATE").length;
   const pct = data?.attendancePercentage ?? 0;
+  const onTimePct = data?.onTimePercentage ?? 0;
 
   return (
     <div className="space-y-4">
       <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5">
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <AttendanceRing pct={pct} />
+          <div className="flex flex-col items-center gap-1">
+            <AttendanceRing pct={pct} />
+            <p className="text-blue-400 text-xs">On-time {Number(onTimePct).toFixed(1)}%</p>
+          </div>
           <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
             {[
               {
@@ -235,6 +230,7 @@ function CalendarTab({ data }) {
     PRESENT: "bg-fbs-green/20 border-fbs-green/40 text-fbs-green",
     ABSENT: "bg-red-900/20 border-red-700/40 text-red-400",
     LATE: "bg-yellow-900/20 border-yellow-700/40 text-yellow-400",
+    HOLIDAY: "bg-gray-800/60 border-gray-600/40 text-gray-400",
   };
 
   return (
@@ -285,6 +281,7 @@ function CalendarTab({ data }) {
             { label: "Present", color: "bg-fbs-green" },
             { label: "Absent", color: "bg-red-400" },
             { label: "Late", color: "bg-yellow-400" },
+            { label: "Holiday", color: "bg-gray-400" },
             { label: "No Session", color: "bg-fbs-border" },
           ].map((l) => (
             <div key={l.label} className="flex items-center gap-1.5">
@@ -312,6 +309,7 @@ function SessionsTab({ data }) {
     PRESENT: sessions.filter((s) => s.status === "PRESENT").length,
     ABSENT: sessions.filter((s) => s.status === "ABSENT").length,
     LATE: sessions.filter((s) => s.status === "LATE").length,
+    HOLIDAY: sessions.filter((s) => s.status === "HOLIDAY").length,
   };
   const filtered =
     filter === "ALL" ? sessions : sessions.filter((s) => s.status === filter);
@@ -323,7 +321,7 @@ function SessionsTab({ data }) {
   return (
     <div className="space-y-4">
       <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-xl p-1">
-        {["ALL", "PRESENT", "ABSENT", "LATE"].map((f) => (
+        {["ALL", "PRESENT", "ABSENT", "LATE", "HOLIDAY"].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -400,7 +398,7 @@ function ConcernTab({ data }) {
   async function fetchConcerns() {
     setLoading(true);
     try {
-      const res = await studentAxios().get("/public/concerns");
+      const res = await studentAxios.get("/public/concerns");
       setConcerns(res.data || []);
     } catch {
       showToast("Failed to load concerns", "error");
@@ -428,7 +426,7 @@ function ConcernTab({ data }) {
           ? { sessionId: Number(form.sessionId) }
           : {}),
       };
-      await studentAxios().post("/public/concerns", payload);
+      await studentAxios.post("/public/concerns", payload);
       showToast("Concern submitted successfully");
       setShowForm(false);
       setForm({ type: "ABSENCE_EXPLANATION", sessionId: "", reason: "" });
@@ -617,10 +615,8 @@ export default function StudentPortal() {
       navigate("/student/login");
       return;
     }
-    axios
-      .get(`${BASE}/public/attendance`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    studentAxios
+      .get("/public/attendance")
       .then((r) => setData(r.data))
       .catch((err) => {
         if (err.response?.status === 401) {

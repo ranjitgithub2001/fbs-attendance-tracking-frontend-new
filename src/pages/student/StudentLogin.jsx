@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../api/axiosInstance';
+import studentAxios from '../../api/studentAxios';
 import fbsLogo from '../../assets/fbs-logo.png';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -15,7 +15,6 @@ function Icon({ d, size = 16 }) {
 
 const ICONS = {
   back:  'M19 12H5m7-7-7 7 7 7',
-  phone: 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.11 8 19.79 19.79 0 0 1 1 2.11 2 2 0 0 1 3 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z',
 };
 
 export default function StudentLogin() {
@@ -24,7 +23,6 @@ export default function StudentLogin() {
   // steps: 'frn' | 'otp' | 'success'
   const [step, setStep]               = useState('frn');
   const [frn, setFrn]                 = useState('');
-  const [maskedPhone, setMaskedPhone] = useState('');
   const [otp, setOtp]                 = useState(['', '', '', '', '', '']);
   const [loading, setLoading]         = useState(false);
   const [error, setError]             = useState('');
@@ -48,16 +46,11 @@ export default function StudentLogin() {
 
     setLoading(true);
     try {
-      // Get masked phone
-      const phoneRes = await axiosInstance.get(`/public/phone?frn=${encodeURIComponent(frn.trim())}`);
-      setMaskedPhone(phoneRes.data.maskedPhone);
-
-      // Send OTP
-      await axiosInstance.post(`/public/otp/send?frn=${encodeURIComponent(frn.trim())}`);
+      await studentAxios.post(`/public/otp/send?frn=${encodeURIComponent(frn.trim())}`);
       setStep('otp');
       setCountdown(300); // 5 min
     } catch (err) {
-      setError(err.response?.data?.message || 'FRN not found. Please check and try again.');
+      setError(err.response?.data?.message || 'Unable to send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -96,7 +89,7 @@ export default function StudentLogin() {
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/public/otp/verify', {
+      const res = await studentAxios.post('/public/otp/verify', {
         frn: frn.trim(),
         otp: otpStr,
       });
@@ -120,7 +113,7 @@ export default function StudentLogin() {
     setOtp(['', '', '', '', '', '']);
     setLoading(true);
     try {
-      await axiosInstance.post(`/public/otp/send?frn=${encodeURIComponent(frn.trim())}`);
+      await studentAxios.post(`/public/otp/send?frn=${encodeURIComponent(frn.trim())}`);
       setCountdown(300);
       otpRefs.current[0]?.focus();
     } catch (err) {
@@ -226,12 +219,9 @@ export default function StudentLogin() {
                 </button>
 
                 <h2 className="text-white text-xl font-semibold mb-1">Enter OTP</h2>
-                <div className="flex items-center gap-2 mb-6">
-                  <Icon d={ICONS.phone} size={14} />
-                  <p className="text-gray-400 text-sm">
-                    OTP sent to <span className="text-white font-medium">{maskedPhone}</span>
-                  </p>
-                </div>
+                <p className="text-gray-400 text-sm mb-6">
+                  If this FRN is registered, an OTP was sent to the registered phone.
+                </p>
 
                 <form onSubmit={handleOtpSubmit} noValidate>
                   {/* OTP boxes */}
