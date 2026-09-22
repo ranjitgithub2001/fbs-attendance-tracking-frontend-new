@@ -152,7 +152,7 @@ export default function StudentLogin() {
           <div className="w-10 h-0.5 bg-fbs-yellow mb-5" />
           <p className="text-fbs-green text-xs font-medium text-center mb-1">Student Attendance Portal</p>
           <p className="text-gray-500 text-xs text-center leading-relaxed">
-            View your attendance records<br />using your FRN and registered phone
+            View your attendance records<br />using your FRN and registered email
           </p>
         </div>
       </div>
@@ -220,7 +220,7 @@ export default function StudentLogin() {
 
                 <h2 className="text-white text-xl font-semibold mb-1">Enter OTP</h2>
                 <p className="text-gray-400 text-sm mb-6">
-                  If this FRN is registered, an OTP was sent to the registered phone.
+                  If this FRN is registered, an OTP was sent to the registered email.
                 </p>
 
                 <form onSubmit={handleOtpSubmit} noValidate>
