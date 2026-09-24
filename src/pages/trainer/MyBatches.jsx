@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import DashboardLayout from "../../components/DashboardLayout";
-import { useAuth } from "../../context/AuthContext";
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 function Icon({ d, size = 16 }) {
@@ -181,10 +180,6 @@ function NoAccessBatchRow({ batch, onRequestAccess, requesting }) {
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function MyBatches() {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const trainerId = user?.userId;
-  console.log("user:", user);
-  console.log("trainerId:", trainerId);
 
   const [allBatches, setAllBatches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -202,7 +197,7 @@ export default function MyBatches() {
     try {
       const [allRes, accessibleRes] = await Promise.all([
         axiosInstance.get("/batches"),
-        axiosInstance.get(`/batches/accessible/${trainerId}`),
+        axiosInstance.get("/batches/accessible"),
       ]);
       const accessibleIds = new Set(accessibleRes.data.map((b) => b.id));
 

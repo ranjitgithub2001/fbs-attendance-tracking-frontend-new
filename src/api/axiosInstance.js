@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
     const status = error?.response?.status;
     const url = error?.config?.url || "";
     if (
-      (status === 401 || status === 403) &&
+      status === 401 &&
       !isUnauthenticatedApiCall(url) &&
       !isUnauthenticatedApiCall(error?.config?.baseURL + url)
     ) {

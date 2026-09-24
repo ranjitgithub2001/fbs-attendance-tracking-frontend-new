@@ -190,11 +190,11 @@ export default function MarkAttendance() {
   // ── Fetch accessible batches ───────────────────────────────────────────────
   useEffect(() => {
     axiosInstance
-      .get(`/batches/accessible/${trainerId}`)
+      .get("/batches/accessible")
       .then((r) => setBatches(r.data || []))
       .catch(() => showToast("Failed to load batches", "error"))
       .finally(() => setLoadingBatches(false));
-  }, [trainerId]);
+  }, []);
 
   // ── Fetch students + existing session when batch/date changes ──────────────
   const fetchSessionData = useCallback(async () => {

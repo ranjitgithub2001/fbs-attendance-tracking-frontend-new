@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import DashboardLayout from "../../components/DashboardLayout";
-import { useAuth } from "../../context/AuthContext";
 
 // reuse same batch dropdown pattern
 import { useRef } from "react";
@@ -67,9 +66,6 @@ function SearchableBatchSelect({ batches, value, onChange }) {
 }
 
 export default function TrainerHolidayRequest() {
-  const { user } = useAuth();
-  const trainerId = user?.userId;
-
   const [batches, setBatches] = useState([]);
   const [batchId, setBatchId] = useState("");
   const [date, setDate] = useState("");
@@ -82,10 +78,10 @@ export default function TrainerHolidayRequest() {
   // fetch trainer batches (same as MarkAttendance)
   useEffect(() => {
     axiosInstance
-      .get(`/batches/accessible/${trainerId}`)
+      .get("/batches/accessible")
       .then((res) => setBatches(res.data || []))
       .finally(() => setLoading(false));
-  }, [trainerId]);
+  }, []);
 
   async function handleSubmit() {
     if (!batchId || !date || !reason) {
