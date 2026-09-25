@@ -31,7 +31,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -127,7 +127,7 @@ export default function AbsenceAlerts() {
       pageTitle="Absence Alerts"
       pageSubtitle="Track and respond to consecutive absence alerts">
       {/* ── Stats ── */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="mb-6 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
         {[
           { label: "Total Alerts", value: counts.ALL, color: "text-white" },
           {
@@ -139,16 +139,16 @@ export default function AbsenceAlerts() {
         ].map((c) => (
           <div
             key={c.label}
-            className="bg-fbs-card border border-fbs-border rounded-2xl p-5">
-            <p className="text-xs text-gray-500 mb-1">{c.label}</p>
-            <p className={`text-3xl font-bold ${c.color}`}>{c.value}</p>
+            className="min-w-0 rounded-2xl border border-fbs-border bg-fbs-card p-4 last:col-span-2 sm:p-5 sm:last:col-span-1">
+            <p className="mb-1 truncate text-xs text-gray-500">{c.label}</p>
+            <p className={`text-2xl font-bold sm:text-3xl ${c.color}`}>{c.value}</p>
           </div>
         ))}
       </div>
 
       {/* ── Search + Filter ── */}
-      <div className="flex gap-3 mb-4">
-        <div className="relative flex-1">
+      <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row">
+        <div className="relative min-w-0 flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
             <Icon d={ICONS.search} size={14} />
           </span>
@@ -157,24 +157,26 @@ export default function AbsenceAlerts() {
             placeholder="Search by name, FRN or batch..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-fbs-card border border-fbs-border rounded-lg pl-9 pr-4 py-2.5 text-white text-sm outline-none focus:border-fbs-green"
+            className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-card py-2.5 pl-9 pr-4 text-sm text-white outline-none focus:border-fbs-green"
           />
         </div>
-        <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-lg p-1">
+        <div className="-mx-1 overflow-x-auto px-1">
+        <div className="flex w-max min-w-full gap-1 rounded-lg border border-fbs-border bg-fbs-card p-1">
           {["ALL", "AWAITING", "REPLIED"].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors
+              className={`min-h-11 rounded-md px-3 py-1.5 text-xs font-medium transition-colors
                 ${filter === f ? "bg-fbs-green text-black" : "text-gray-400 hover:text-white"}`}>
               {f}{" "}
               <span
-                className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px]
+                className={`ml-1 rounded-full px-1.5 py-0.5 text-[10px]
                 ${filter === f ? "bg-black/20 text-black" : "bg-fbs-border text-gray-400"}`}>
                 {counts[f]}
               </span>
             </button>
           ))}
+        </div>
         </div>
       </div>
 
@@ -189,8 +191,9 @@ export default function AbsenceAlerts() {
             No alerts found
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-[2fr_1.5fr_1.5fr_1.2fr_1.5fr_1.5fr_1fr] px-5 py-3 text-xs text-gray-500 uppercase border-b border-fbs-border">
+          <div>
+            <div className="hidden overflow-x-auto md:block">
+            <div className="grid min-w-[960px] grid-cols-[2fr_1.5fr_1.5fr_1.2fr_1.5fr_1.5fr_1fr] border-b border-fbs-border px-5 py-3 text-xs uppercase text-gray-500">
               <div>Student</div>
               <div>FRN</div>
               <div>Batch</div>
@@ -200,11 +203,11 @@ export default function AbsenceAlerts() {
               <div className="text-right">Actions</div>
             </div>
 
-            <div className="space-y-2 p-3">
+            <div className="min-w-[960px] space-y-2 p-3">
               {filtered.map((a) => (
                 <div
                   key={a.id}
-                  className="group relative grid grid-cols-[2fr_1.5fr_1.5fr_1.2fr_1.5fr_1.5fr_1fr] items-center px-4 py-3 rounded-xl border border-fbs-border bg-fbs-dark/30 hover:bg-fbs-dark/50 hover:-translate-y-[2px] hover:shadow-lg transition-all duration-200">
+                  className="group relative grid grid-cols-[2fr_1.5fr_1.5fr_1.2fr_1.5fr_1.5fr_1fr] items-center rounded-xl border border-fbs-border bg-fbs-dark/30 px-4 py-3 transition-all duration-200 hover:-translate-y-[2px] hover:bg-fbs-dark/50 hover:shadow-lg">
                   {/* STUDENT */}
                   <div className="text-white text-sm font-medium">
                     {a.studentName}
@@ -261,16 +264,62 @@ export default function AbsenceAlerts() {
                         setReplyModal(a);
                         setReplyText(a.replied ? a.replyText || "" : "");
                       }}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                      className={`flex min-h-11 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all
       ${
         a.replied
-          ? "border border-fbs-border text-gray-300 hover:text-white hover:border-fbs-green"
+          ? "border border-fbs-border text-gray-300 hover:border-fbs-green hover:text-white"
           : "bg-fbs-green text-black hover:bg-fbs-green/90"
       }`}>
                       <Icon d={ICONS.reply} size={12} />
                       {a.replied ? "View Reply" : "Log Reply"}
                     </button>
                   </div>
+                </div>
+              ))}
+            </div>
+            </div>
+            <div className="divide-y divide-fbs-border md:hidden">
+              {filtered.map((a) => (
+                <div key={a.id} className="space-y-2 px-4 py-4">
+                  <div className="flex min-w-0 items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">{a.studentName}</p>
+                      <p className="truncate font-mono text-xs text-gray-400">{a.frn}</p>
+                    </div>
+                    <span
+                      className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold ${
+                        a.replied
+                          ? "border-fbs-green/20 bg-fbs-green/10 text-fbs-green"
+                          : "border-red-700/30 bg-red-900/20 text-red-400"
+                      }`}>
+                      {a.replied ? "Replied" : "Awaiting"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400">{a.batchName}</p>
+                  <p className={`text-sm font-semibold ${
+                    a.consecutiveCount >= 5
+                      ? "text-red-400"
+                      : a.consecutiveCount >= 3
+                        ? "text-yellow-400"
+                        : "text-gray-400"
+                  }`}>
+                    {a.consecutiveCount} consecutive days
+                  </p>
+                  <p className="text-xs text-gray-400">Alert sent {formatDate(a.alertSentAt)}</p>
+                  <button
+                    onClick={() => {
+                      setReplyModal(a);
+                      setReplyText(a.replied ? a.replyText || "" : "");
+                    }}
+                    className={`flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium
+                      ${
+                        a.replied
+                          ? "border border-fbs-border text-gray-300"
+                          : "bg-fbs-green text-black"
+                      }`}>
+                    <Icon d={ICONS.reply} size={12} />
+                    {a.replied ? "View Reply" : "Log Reply"}
+                  </button>
                 </div>
               ))}
             </div>
@@ -287,7 +336,7 @@ export default function AbsenceAlerts() {
                 setReplyModal(null);
                 setReplyText("");
               }}
-              className="absolute top-4 right-4 text-gray-500 hover:text-white text-sm">
+              className="absolute right-4 top-4 flex min-h-11 min-w-11 items-center justify-center text-sm text-gray-500 hover:text-white">
               ✕
             </button>
             <h3 className="text-white font-semibold mb-1">
@@ -324,7 +373,7 @@ export default function AbsenceAlerts() {
                   setReplyModal(null);
                   setReplyText("");
                 }}
-                className="px-3 py-2 text-gray-400 hover:text-white text-sm transition-colors">
+                className="min-h-11 px-3 py-2 text-sm text-gray-400 transition-colors hover:text-white">
                 {replyModal.replied ? "Close" : "Cancel"}
               </button>
 
@@ -332,9 +381,7 @@ export default function AbsenceAlerts() {
                 <button
                   onClick={handleLogReply}
                   disabled={submitting || !replyText.trim()}
-                  className="bg-fbs-green text-black text-sm font-semibold px-5 py-2 rounded-lg
-        hover:bg-fbs-green/90 active:scale-95 transition-all duration-100
-        disabled:opacity-50">
+                  className="min-h-11 rounded-lg bg-fbs-green px-5 py-2 text-sm font-semibold text-black transition-all duration-100 hover:bg-fbs-green/90 active:scale-95 disabled:opacity-50">
                   {submitting ? "Saving..." : "Save Reply"}
                 </button>
               )}

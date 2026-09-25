@@ -42,7 +42,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -166,9 +166,9 @@ function StudentModal({ student, batches, onClose, onSave }) {
             Student Info
           </p>
 
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-1.5">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                 FRN
               </label>
               <input
@@ -177,11 +177,11 @@ function StudentModal({ student, batches, onClose, onSave }) {
                 onChange={(e) => set("frn", e.target.value)}
                 placeholder="FRN-23J1224/001"
                 disabled={isEdit}
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
             <div>
-              <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-1.5">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                 Full Name
               </label>
               <input
@@ -189,12 +189,12 @@ function StudentModal({ student, batches, onClose, onSave }) {
                 value={form.fullName}
                 onChange={(e) => set("fullName", e.target.value)}
                 placeholder="Ravi Kumar"
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-1.5">
                 Email
@@ -204,11 +204,11 @@ function StudentModal({ student, batches, onClose, onSave }) {
                 value={form.email}
                 onChange={(e) => set("email", e.target.value)}
                 placeholder="ravi@gmail.com"
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
               />
             </div>
             <div>
-              <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-1.5">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                 Phone
               </label>
               <input
@@ -216,7 +216,7 @@ function StudentModal({ student, batches, onClose, onSave }) {
                 value={form.phone}
                 onChange={(e) => set("phone", e.target.value)}
                 placeholder="9876543210"
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
               />
             </div>
           </div>
@@ -230,7 +230,7 @@ function StudentModal({ student, batches, onClose, onSave }) {
               value={form.batchId}
               onChange={(e) => set("batchId", e.target.value)}
               disabled={isEdit}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-fbs-green transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+              className="w-full min-h-11 cursor-pointer rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white outline-none transition-colors focus:border-fbs-green disabled:cursor-not-allowed disabled:opacity-50">
               <option value="" disabled>
                 Select batch
               </option>
@@ -254,9 +254,9 @@ function StudentModal({ student, batches, onClose, onSave }) {
             Parent / Guardian Info
           </p>
 
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-1.5">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                 Parent / Guardian Name
               </label>
               <input
@@ -264,11 +264,11 @@ function StudentModal({ student, batches, onClose, onSave }) {
                 value={form.guardianName}
                 onChange={(e) => set("guardianName", e.target.value)}
                 placeholder="Suresh Kumar"
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
               />
             </div>
             <div>
-              <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-1.5">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                 Parent / Guardian Phone
               </label>
               <input
@@ -276,7 +276,7 @@ function StudentModal({ student, batches, onClose, onSave }) {
                 value={form.guardianPhone}
                 onChange={(e) => set("guardianPhone", e.target.value)}
                 placeholder="9876543211"
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
               />
             </div>
           </div>
@@ -290,7 +290,7 @@ function StudentModal({ student, batches, onClose, onSave }) {
               value={form.guardianEmail}
               onChange={(e) => set("guardianEmail", e.target.value)}
               placeholder="parent@gmail.com"
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
             />
           </div>
 
@@ -298,13 +298,13 @@ function StudentModal({ student, batches, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-colors">
+              className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-colors hover:text-white">
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2.5 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold rounded-lg text-sm transition-colors disabled:opacity-50">
+              className="min-h-11 flex-1 rounded-lg bg-fbs-green py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-fbs-yellow disabled:opacity-50">
               {loading
                 ? "Saving..."
                 : isEdit
@@ -333,13 +333,13 @@ function ConfirmModal({ student, onClose, onConfirm, loading }) {
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-colors">
+            className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-colors hover:text-white">
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="flex-1 py-2.5 bg-red-900/30 hover:bg-red-900/50 border border-red-700/40 text-red-400 rounded-lg text-sm transition-colors disabled:opacity-50">
+            className="min-h-11 flex-1 rounded-lg border border-red-700/40 bg-red-900/30 py-2.5 text-sm text-red-400 transition-colors hover:bg-red-900/50 disabled:opacity-50">
             {loading ? "Deactivating..." : "Deactivate"}
           </button>
         </div>
@@ -461,16 +461,11 @@ export default function Students() {
     ACTIVE: students.filter((s) => s.active).length,
     INACTIVE: students.filter((s) => !s.active).length,
   };
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search, batchFilter, statusFilter]);
-
   return (
     <DashboardLayout
       pageTitle="Students"
       pageSubtitle="Manage enrolled students">
-      {/* Action bar */}
-      <div className="flex justify-end gap-2 mb-4">
+      <div className="mb-4 flex flex-wrap justify-end gap-2">
         {/* Bulk upload */}
         <input
           type="file"
@@ -482,7 +477,7 @@ export default function Students() {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          className="flex items-center gap-2 bg-fbs-card border border-fbs-border hover:border-fbs-green/40 text-gray-400 hover:text-fbs-green font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50">
+          className="flex min-h-11 items-center gap-2 rounded-lg border border-fbs-border bg-fbs-card px-4 py-2.5 text-sm font-semibold text-gray-400 transition-colors hover:border-fbs-green/40 hover:text-fbs-green disabled:opacity-50">
           <Icon d={ICONS.upload} size={15} />
           {uploading ? "Uploading..." : "Bulk CSV"}
         </button>
@@ -490,16 +485,16 @@ export default function Students() {
         {/* Add student */}
         <button
           onClick={() => setModal("create")}
-          className="flex items-center gap-2 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors">
+          className="flex min-h-11 items-center gap-2 rounded-lg bg-fbs-green px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-fbs-yellow">
           <Icon d={ICONS.plus} size={15} />
           Add Student
         </button>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row">
         {/* Search */}
-        <div className="relative flex-1">
+        <div className="relative min-w-0 flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
             <Icon d={ICONS.search} size={14} />
           </span>
@@ -507,16 +502,22 @@ export default function Students() {
             type="text"
             placeholder="Search by name, FRN or phone…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-fbs-card border border-fbs-border rounded-lg pl-9 pr-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-card py-2.5 pl-9 pr-4 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
           />
         </div>
 
         {/* Batch filter */}
         <select
           value={batchFilter}
-          onChange={(e) => setBatchFilter(e.target.value)}
-          className="bg-fbs-card border border-fbs-border rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-fbs-green transition-colors cursor-pointer">
+          onChange={(e) => {
+            setBatchFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="min-h-11 cursor-pointer rounded-lg border border-fbs-border bg-fbs-card px-3 py-2 text-xs text-white outline-none transition-colors focus:border-fbs-green">
           {batchNames.map((b) => (
             <option key={b} value={b}>
               {b === "ALL" ? "All Batches" : b}
@@ -525,16 +526,21 @@ export default function Students() {
         </select>
 
         {/* Status filter */}
-        <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-lg p-1">
+        <div className="-mx-1 overflow-x-auto px-1">
+          <div className="flex w-max min-w-full gap-1 rounded-lg border border-fbs-border bg-fbs-card p-1">
           {["ALL", "ACTIVE", "INACTIVE"].map((s) => (
             <button
               key={s}
-              onClick={() => setStatusFilter(s)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors
+              onClick={() => {
+                setStatusFilter(s);
+                setCurrentPage(1);
+              }}
+              className={`min-h-11 rounded-md px-3 py-1.5 text-xs font-semibold transition-colors
                 ${statusFilter === s ? "bg-fbs-green text-gray-900" : "text-gray-400 hover:text-white"}`}>
               {s} <span className="ml-1 opacity-70">({counts[s]})</span>
             </button>
           ))}
+          </div>
         </div>
       </div>
 
@@ -547,8 +553,9 @@ export default function Students() {
             {search ? "No students match your search" : "No students found"}
           </div>
         ) : (
-          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600">
-            <div className="min-w-[1200px]">
+          <div>
+            <div className="hidden overflow-x-auto md:block">
+              <div className="min-w-[1200px]">
               <table className="w-full text-sm">
                 <div className="px-6 py-3 border-b border-fbs-border">
                   <div className="grid grid-cols-[2.5fr_1.5fr_1.5fr_2fr_1.5fr_1.5fr_1fr_1fr] items-center text-[11px] text-gray-400 uppercase tracking-widest font-semibold">
@@ -650,18 +657,58 @@ export default function Students() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
-            <div className="px-5 py-3 border-t border-fbs-border flex items-center justify-between">
-              <p className="text-gray-600 text-xs">
+            <div className="divide-y divide-fbs-border md:hidden">
+              {paginated.map((s) => (
+                <div key={s.id} className="space-y-2 px-4 py-4">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-fbs-green/20 bg-fbs-green/10">
+                      <span className="text-xs font-bold text-fbs-green">
+                        {s.fullName?.charAt(0)?.toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[15px] font-semibold text-white">{s.fullName}</p>
+                      <p className="truncate text-xs text-gray-500">{s.email || "—"}</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300">{s.frn}</p>
+                    </div>
+                    <StatusBadge active={s.active} />
+                  </div>
+                  <p className="text-xs text-gray-400">Phone: {s.phone || "—"}</p>
+                  <p className="truncate text-xs text-gray-400">
+                    Guardian: {s.guardianName || "—"} · {s.guardianPhone || "—"}
+                  </p>
+                  <span className="inline-block rounded-full border border-blue-700/30 bg-blue-900/20 px-2.5 py-0.5 text-[10px] font-semibold text-blue-400">
+                    {s.batchName || "—"}
+                  </span>
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      onClick={() => setModal(s)}
+                      className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-fbs-border text-xs text-gray-300">
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => setConfirmStudent(s)}
+                      disabled={!s.active}
+                      className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-red-900/30 text-xs text-red-400 disabled:opacity-30">
+                      Deactivate
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-5">
+              <p className="text-xs text-gray-600">
                 Showing {(currentPage - 1) * PAGE_SIZE + 1}–
                 {Math.min(currentPage * PAGE_SIZE, filtered.length)} of{" "}
                 {filtered.length} students
               </p>
-              <div className="flex items-center gap-1">
+              <div className="flex flex-wrap items-center gap-1">
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 bg-fbs-dark border border-fbs-border rounded-lg text-xs text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                  className="min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30 sm:min-h-0">
                   ←
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -696,7 +743,7 @@ export default function Students() {
                     setCurrentPage((p) => Math.min(totalPages, p + 1))
                   }
                   disabled={currentPage === totalPages || totalPages === 0}
-                  className="px-3 py-1.5 bg-fbs-dark border border-fbs-border rounded-lg text-xs text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                  className="min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30 sm:min-h-0">
                   →
                 </button>
               </div>

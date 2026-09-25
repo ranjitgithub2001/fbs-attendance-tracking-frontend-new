@@ -41,7 +41,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-24 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:bottom-6 md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -77,7 +77,7 @@ function StatusPill({ status, active, onClick, disabled }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-8 h-8 rounded-lg border text-xs font-bold transition-all
+      className={`h-11 w-11 min-h-11 min-w-11 rounded-lg border text-xs font-bold transition-all md:h-8 md:w-8 md:min-h-8 md:min-w-8
         ${active ? cfg.bg : "bg-fbs-dark border-fbs-border text-gray-600 hover:border-gray-500"}
         ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}>
       {cfg.label}
@@ -106,9 +106,9 @@ function SearchableBatchSelect({ batches, value, onChange }) {
     <div className="relative" ref={ref}>   {/* ← ref must be HERE */}
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2.5 text-sm text-left outline-none focus:border-fbs-green transition-colors flex items-center justify-between"
+        className="w-full min-h-11 bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2.5 text-sm text-left outline-none focus:border-fbs-green transition-colors flex items-center justify-between gap-2"
       >
-        <span className={selected ? 'text-white' : 'text-gray-600'}>
+        <span className={`min-w-0 truncate ${selected ? 'text-white' : 'text-gray-600'}`}>
           {selected ? selected.batchName : 'Select batch'}
         </span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -364,9 +364,9 @@ export default function MarkAttendance() {
     <DashboardLayout
       pageTitle="Mark Attendance"
       pageSubtitle="Record student attendance per session">
-      <div className="max-w-4xl mx-auto space-y-4">
+      <div className="max-w-4xl mx-auto min-w-0 space-y-4">
         {/* ── Step 1: Session Setup ── */}
-        <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5">
+        <div className="bg-fbs-card border border-fbs-border rounded-2xl p-4 md:p-5">
           <p className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold mb-4">
             Step 1 — Session Setup
           </p>
@@ -401,7 +401,7 @@ export default function MarkAttendance() {
                 value={selectedDate}
                 max={today}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2.5 text-white text-sm outline-none focus:border-fbs-green transition-colors"
+                className="w-full min-h-11 bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2.5 text-white text-sm outline-none focus:border-fbs-green transition-colors"
               />
             </div>
 
@@ -447,28 +447,30 @@ export default function MarkAttendance() {
         {selectedBatch && (
           <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
             {/* Header */}
-            <div className="px-5 py-4 border-b border-fbs-border">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold">
-                  Step 2 — Mark Students
+            <div className="px-4 py-4 border-b border-fbs-border md:px-5">
+              <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest font-semibold">
+                    Step 2 — Mark Students
+                  </p>
                   {selectedBatchObj && (
-                    <span className="ml-2 text-white normal-case tracking-normal font-medium">
+                    <p className="mt-1 truncate text-sm font-medium text-white">
                       {selectedBatchObj.batchName}
-                    </span>
+                    </p>
                   )}
-                </p>
+                </div>
 
                 {/* Bulk actions */}
                 {!isLocked && students.length > 0 && (
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => markAll("PRESENT")}
-                      className="px-3 py-1.5 bg-fbs-green/10 border border-fbs-green/20 text-fbs-green rounded-lg text-xs font-semibold hover:bg-fbs-green/20 transition-colors">
+                      className="min-h-11 px-3 py-2 bg-fbs-green/10 border border-fbs-green/20 text-fbs-green rounded-lg text-xs font-semibold hover:bg-fbs-green/20 transition-colors md:min-h-0 md:py-1.5">
                       All Present
                     </button>
                     <button
                       onClick={() => markAll("ABSENT")}
-                      className="px-3 py-1.5 bg-red-900/10 border border-red-900/20 text-red-400 rounded-lg text-xs font-semibold hover:bg-red-900/20 transition-colors">
+                      className="min-h-11 px-3 py-2 bg-red-900/10 border border-red-900/20 text-red-400 rounded-lg text-xs font-semibold hover:bg-red-900/20 transition-colors md:min-h-0 md:py-1.5">
                       All Absent
                     </button>
                   </div>
@@ -476,8 +478,8 @@ export default function MarkAttendance() {
               </div>
 
               {/* Search + filter tabs */}
-              <div className="flex flex-col sm:flex-row gap-2">
-                <div className="relative flex-1">
+              <div className="flex min-w-0 flex-col gap-2 sm:flex-row">
+                <div className="relative min-w-0 flex-1">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                     <Icon d={ICONS.search} size={13} />
                   </span>
@@ -486,22 +488,24 @@ export default function MarkAttendance() {
                     placeholder="Search by name or FRN…"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full bg-fbs-dark border border-fbs-border rounded-lg pl-8 pr-3 py-2 text-white text-xs placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                    className="w-full min-h-11 bg-fbs-dark border border-fbs-border rounded-lg pl-8 pr-3 py-2 text-white text-xs placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
                   />
                 </div>
 
-                <div className="flex gap-1 bg-fbs-dark border border-fbs-border rounded-lg p-1">
-                  {["ALL", "PRESENT", "ABSENT", "LATE", "UNMARKED"].map(
-                    (tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setFilterTab(tab)}
-                        className={`px-2.5 py-1 rounded-md text-[10px] font-semibold transition-colors whitespace-nowrap
+                <div className="min-w-0 overflow-x-auto">
+                  <div className="flex w-max min-w-full gap-1 bg-fbs-dark border border-fbs-border rounded-lg p-1">
+                    {["ALL", "PRESENT", "ABSENT", "LATE", "UNMARKED"].map(
+                      (tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setFilterTab(tab)}
+                          className={`min-h-11 shrink-0 px-2.5 py-1 rounded-md text-[10px] font-semibold transition-colors whitespace-nowrap md:min-h-0
                         ${filterTab === tab ? "bg-fbs-green text-gray-900" : "text-gray-400 hover:text-white"}`}>
-                        {tab} ({tabCounts[tab]})
-                      </button>
-                    ),
-                  )}
+                          {tab} ({tabCounts[tab]})
+                        </button>
+                      ),
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -525,31 +529,27 @@ export default function MarkAttendance() {
                   return (
                     <div
                       key={s.id}
-                      className={`flex items-center gap-4 px-5 py-3.5 transition-colors ${rowBg}`}>
-                      {/* Index */}
-                      <span className="text-gray-600 text-xs w-5 text-right flex-shrink-0">
-                        {i + 1}
-                      </span>
-
-                      {/* Avatar */}
-                      <div className="w-8 h-8 rounded-full bg-fbs-card border border-fbs-border flex items-center justify-center flex-shrink-0">
-                        <span className="text-gray-400 text-[11px] font-bold">
-                          {s.fullName?.charAt(0)?.toUpperCase()}
+                      className={`flex flex-col gap-3 px-4 py-3.5 transition-colors md:flex-row md:items-center md:gap-4 md:px-5 ${rowBg}`}>
+                      <div className="flex min-w-0 flex-1 items-center gap-3">
+                        <span className="w-5 shrink-0 text-right text-xs text-gray-600">
+                          {i + 1}
                         </span>
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-fbs-border bg-fbs-card">
+                          <span className="text-[11px] font-bold text-gray-400">
+                            {s.fullName?.charAt(0)?.toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-white">
+                            {s.fullName}
+                          </p>
+                          <p className="truncate font-mono text-xs text-gray-500">
+                            {s.frn}
+                          </p>
+                        </div>
                       </div>
 
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white text-sm font-medium truncate">
-                          {s.fullName}
-                        </p>
-                        <p className="text-gray-500 text-xs font-mono">
-                          {s.frn}
-                        </p>
-                      </div>
-
-                      {/* P / A / L pills */}
-                      <div className="flex gap-1.5 flex-shrink-0">
+                      <div className="flex shrink-0 gap-1.5 self-end md:self-auto">
                         {["PRESENT", "ABSENT", "LATE"].map((st) => (
                           <StatusPill
                             key={st}
@@ -568,29 +568,27 @@ export default function MarkAttendance() {
 
             {/* Footer — progress + submit */}
             {students.length > 0 && (
-              <div className="px-5 py-4 border-t border-fbs-border flex items-center justify-between gap-4">
-                {/* Progress */}
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="flex-1 h-1.5 bg-fbs-dark rounded-full overflow-hidden">
+              <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-4 md:flex-row md:items-center md:justify-between md:gap-4 md:px-5">
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-fbs-dark">
                     <div
-                      className="h-full bg-fbs-green rounded-full transition-all duration-300"
+                      className="h-full rounded-full bg-fbs-green transition-all duration-300"
                       style={{
                         width: `${(students.filter((s) => attendance[s.id]).length / students.length) * 100}%`,
                       }}
                     />
                   </div>
-                  <span className="text-gray-500 text-xs whitespace-nowrap">
+                  <span className="shrink-0 text-xs text-gray-500">
                     {students.filter((s) => attendance[s.id]).length} /{" "}
                     {students.length} marked
                   </span>
                 </div>
 
-                {/* Submit */}
                 {!isLocked && (
                   <button
                     onClick={handleSubmit}
                     disabled={submitting || !allMarked}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors
+                    className={`flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors md:w-auto
                       ${
                         allMarked
                           ? "bg-fbs-green hover:bg-fbs-yellow text-gray-900"

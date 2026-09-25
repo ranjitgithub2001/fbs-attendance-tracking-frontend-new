@@ -29,8 +29,8 @@ function SearchableBatchSelect({ batches, value, onChange }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2.5 text-sm text-left flex justify-between">
-        <span className={selected ? "text-white" : "text-gray-600"}>
+        className="flex min-h-11 w-full items-center justify-between rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2.5 text-left text-sm">
+        <span className={`min-w-0 truncate ${selected ? "text-white" : "text-gray-600"}`}>
           {selected ? selected.batchName : "Select batch"}
         </span>
         <span>⌄</span>
@@ -43,7 +43,7 @@ function SearchableBatchSelect({ batches, value, onChange }) {
             placeholder="Search batch..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-3 py-2 bg-fbs-dark text-white text-xs border-b border-fbs-border"
+            className="w-full min-h-11 border-b border-fbs-border bg-fbs-dark px-3 py-2 text-xs text-white"
           />
 
           <div className="max-h-48 overflow-y-auto">
@@ -54,7 +54,7 @@ function SearchableBatchSelect({ batches, value, onChange }) {
                   onChange(b.id);
                   setOpen(false);
                 }}
-                className="w-full text-left px-4 py-2 text-sm hover:bg-fbs-dark text-white">
+                className="min-h-11 w-full px-4 py-2 text-left text-sm text-white hover:bg-fbs-dark">
                 {b.batchName}
               </button>
             ))}
@@ -71,7 +71,7 @@ export default function TrainerHolidayRequest() {
   const [date, setDate] = useState("");
   const [reason, setReason] = useState("");
 
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [isGlobal, setIsGlobal] = useState(false);
 
@@ -111,20 +111,20 @@ export default function TrainerHolidayRequest() {
     <DashboardLayout
       pageTitle="Request Holiday"
       pageSubtitle="Submit holiday request for your batch">
-      <div className="max-w-xl mx-auto">
-        <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5 space-y-4">
+      <div className="mx-auto min-w-0 max-w-xl">
+        <div className="space-y-4 rounded-2xl border border-fbs-border bg-fbs-card p-4 md:p-5">
           {/* GLOBAL CHECKBOX */}
-          <div className="flex items-center gap-2">
+          <label className="flex min-h-11 items-center gap-3">
             <input
               type="checkbox"
               checked={isGlobal}
               onChange={(e) => setIsGlobal(e.target.checked)}
-              className="accent-fbs-green"
+              className="h-5 w-5 shrink-0 accent-fbs-green"
             />
             <span className="text-sm text-gray-400">
               Apply to all batches (Global Holiday)
             </span>
-          </div>
+          </label>
 
           {/* Batch (ONLY if not global) */}
           {!isGlobal && (
@@ -145,18 +145,18 @@ export default function TrainerHolidayRequest() {
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-white"
             />
           </div>
 
           {/* Reason */}
           <div>
-            <label className="text-xs text-fbs-green mb-2 block">Reason</label>
+            <label className="mb-2 block text-xs text-fbs-green">Reason</label>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={3}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white"
+              className="w-full rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-white"
             />
           </div>
 
@@ -164,7 +164,7 @@ export default function TrainerHolidayRequest() {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full bg-fbs-green text-black py-2 rounded-lg font-semibold">
+            className="min-h-11 w-full rounded-lg bg-fbs-green py-2 font-semibold text-black">
             {submitting ? "Submitting..." : "Submit Request"}
           </button>
         </div>

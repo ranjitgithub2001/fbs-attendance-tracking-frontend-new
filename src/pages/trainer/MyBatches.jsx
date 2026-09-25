@@ -43,7 +43,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -123,7 +123,7 @@ function AccessibleBatchCard({ batch, onMarkAttendance }) {
       {batch.active && (
         <button
           onClick={() => onMarkAttendance(batch.id)}
-          className="w-full flex items-center justify-center gap-2 py-2.5 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm rounded-xl transition-colors">
+          className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-fbs-green py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-fbs-yellow">
           <Icon d={ICONS.attendance} size={14} />
           Mark Attendance
         </button>
@@ -137,38 +137,38 @@ function NoAccessBatchRow({ batch, onRequestAccess, requesting }) {
   const isPending = batch.accessRequested && !batch.accessApproved;
 
   return (
-    <div className="flex items-center gap-4 py-3.5 border-b border-fbs-border last:border-0">
+    <div className="flex flex-col gap-3 border-b border-fbs-border py-3.5 last:border-0 sm:flex-row sm:items-center sm:gap-4">
       {/* Icon */}
-      <div className="w-9 h-9 bg-fbs-card border border-fbs-border rounded-xl flex items-center justify-center flex-shrink-0">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-fbs-border bg-fbs-card">
         <Icon d={ICONS.lock} size={14} />
       </div>
 
       {/* Info */}
-      <div className="flex-1 min-w-0">
-        <p className="text-white text-sm font-medium truncate">
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-white">
           {batch.batchName}
         </p>
-        <div className="flex items-center gap-2 mt-0.5">
+        <div className="mt-0.5 flex flex-wrap items-center gap-2">
           <TechBadge tech={batch.technology} />
-          <span className="text-gray-600 text-xs">·</span>
-          <span className="text-gray-500 text-xs font-mono">
+          <span className="font-mono text-xs text-gray-500">
             {batch.frnCode}
           </span>
-          <span className="text-gray-600 text-xs">·</span>
-          <span className="text-gray-500 text-xs">Year {batch.year}</span>
+          <span className="text-xs text-gray-500">Year {batch.year}</span>
         </div>
+      </div>
       </div>
 
       {/* Action */}
       {isPending ? (
-        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-900/20 border border-yellow-900/30 text-yellow-400 rounded-lg text-xs font-semibold flex-shrink-0">
+        <span className="flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-yellow-900/30 bg-yellow-900/20 px-3 py-1.5 text-xs font-semibold text-yellow-400 sm:min-h-0">
           <Icon d={ICONS.clock} size={12} /> Pending
         </span>
       ) : (
         <button
           onClick={() => onRequestAccess(batch.id)}
           disabled={requesting === batch.id}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-fbs-card border border-fbs-border hover:border-fbs-green/40 hover:text-fbs-green text-gray-400 rounded-lg text-xs font-semibold transition-colors flex-shrink-0 disabled:opacity-40">
+          className="flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-fbs-border bg-fbs-card px-3 py-1.5 text-xs font-semibold text-gray-400 transition-colors hover:border-fbs-green/40 hover:text-fbs-green disabled:opacity-40 sm:min-h-0">
           <Icon d={ICONS.plus} size={12} />
           {requesting === batch.id ? "Requesting…" : "Request Access"}
         </button>
@@ -300,19 +300,19 @@ export default function MyBatches() {
 
           {/* ── Section 2: No Access Batches ── */}
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
-                <h2 className="text-white text-sm font-semibold">
+                <h2 className="text-sm font-semibold text-white">
                   Other Batches
                 </h2>
-                <span className="px-2 py-0.5 bg-fbs-card border border-fbs-border text-gray-400 text-[10px] font-bold rounded-full">
+                <span className="rounded-full border border-fbs-border bg-fbs-card px-2 py-0.5 text-[10px] font-bold text-gray-400">
                   {noAccessBatches.length}
                 </span>
               </div>
 
               {/* Search */}
               {noAccessBatches.length > 0 && (
-                <div className="relative w-56">
+                <div className="relative w-full min-w-0 sm:w-56">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                     <Icon d={ICONS.search} size={13} />
                   </span>
@@ -321,7 +321,7 @@ export default function MyBatches() {
                     placeholder="Search batches…"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full bg-fbs-card border border-fbs-border rounded-lg pl-8 pr-3 py-2 text-white text-xs placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                    className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-card py-2 pl-8 pr-3 text-xs text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                   />
                 </div>
               )}
@@ -342,7 +342,7 @@ export default function MyBatches() {
             ) : (
               <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
                 {/* Legend */}
-                <div className="flex items-center gap-4 px-5 py-3 border-b border-fbs-border">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-fbs-border px-4 py-3 md:px-5">
                   {[
                     { label: "Not requested", color: "bg-gray-500" },
                     { label: "Request pending", color: "bg-yellow-400" },

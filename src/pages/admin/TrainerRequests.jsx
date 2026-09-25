@@ -30,7 +30,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -88,7 +88,6 @@ export default function TrainerRequests() {
 
   useEffect(() => {
     fetchRequests();
-    setCurrentPage(1);
   }, [search, filter]);
 
   async function handleAction(id, action) {
@@ -168,8 +167,8 @@ export default function TrainerRequests() {
       pageTitle="Trainer Requests"
       pageSubtitle="Manage trainer approvals">
       {/* Search + Filter */}
-      <div className="flex gap-3 mb-4">
-        <div className="relative flex-1">
+      <div className="mb-4 flex min-w-0 flex-col gap-3">
+        <div className="relative min-w-0">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
             <Icon d={ICONS.search} size={14} />
           </span>
@@ -177,16 +176,21 @@ export default function TrainerRequests() {
             type="text"
             placeholder="Search trainer..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-fbs-card border border-fbs-border rounded-lg pl-9 pr-4 py-2.5 text-white text-sm outline-none focus:border-fbs-green"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-card py-2.5 pl-9 pr-4 text-sm text-white outline-none focus:border-fbs-green"
           />
         </div>
-        <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-lg p-1">
+        <div className="-mx-1 overflow-x-auto px-1">
+          <div className="flex w-max min-w-full gap-3">
+        <div className="flex shrink-0 gap-1 rounded-lg border border-fbs-border bg-fbs-card p-1">
           {["LATEST", "OLDEST"].map((s) => (
             <button
               key={s}
               onClick={() => setSortOrder(s)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors
+              className={`min-h-11 rounded-md px-3 py-1.5 text-xs font-medium transition-colors
       ${
         sortOrder === s
           ? "bg-fbs-green text-black"
@@ -197,12 +201,15 @@ export default function TrainerRequests() {
           ))}
         </div>
 
-        <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-lg p-1">
+        <div className="flex shrink-0 gap-1 rounded-lg border border-fbs-border bg-fbs-card p-1">
           {["ALL", "PENDING", "APPROVED", "REJECTED"].map((f) => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors
+              onClick={() => {
+                setFilter(f);
+                setCurrentPage(1);
+              }}
+              className={`min-h-11 rounded-md px-3 py-1.5 text-xs font-medium transition-colors
       ${
         filter === f
           ? "bg-fbs-green text-black"
@@ -210,12 +217,14 @@ export default function TrainerRequests() {
       }`}>
               {f}{" "}
               <span
-                className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px]
+                className={`ml-1 rounded-full px-1.5 py-0.5 text-[10px]
       ${filter === f ? "bg-black/20 text-black" : "bg-fbs-border text-gray-400"}`}>
                 {counts[f]}
               </span>
             </button>
           ))}
+        </div>
+          </div>
         </div>
       </div>
 
@@ -228,8 +237,9 @@ export default function TrainerRequests() {
             No requests found
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-[2fr_2fr_1.5fr_1fr_1fr_1fr] px-5 py-3 text-xs text-gray-500 uppercase border-b border-fbs-border">
+          <div>
+            <div className="hidden overflow-x-auto md:block">
+            <div className="grid min-w-[800px] grid-cols-[2fr_2fr_1.5fr_1fr_1fr_1fr] border-b border-fbs-border px-5 py-3 text-xs uppercase text-gray-500">
               <div>Trainer</div>
               <div>Email</div>
               <div>Request Type</div>
@@ -238,13 +248,11 @@ export default function TrainerRequests() {
               <div className="text-right">Actions</div>
             </div>
 
-            <div className="space-y-2 p-3">
+            <div className="min-w-[800px] space-y-2 p-3">
               {paginatedData.map((r) => (
                 <div
                   key={r.id}
-                  className="group relative grid grid-cols-[2fr_2fr_1.5fr_1fr_1fr_1fr] items-center px-4 py-3 rounded-xl border border-fbs-border bg-fbs-dark/30 
-hover:bg-fbs-dark/50 hover:-translate-y-[2px] hover:shadow-lg 
-transition-all duration-200 ease-out">
+                  className="group relative grid grid-cols-[2fr_2fr_1.5fr_1fr_1fr_1fr] items-center rounded-xl border border-fbs-border bg-fbs-dark/30 px-4 py-3 transition-all duration-200 ease-out hover:-translate-y-[2px] hover:bg-fbs-dark/50 hover:shadow-lg">
                   {/* TRAINER */}
                   <div className="text-white text-sm font-medium">
                     {r.trainerName}
@@ -276,7 +284,7 @@ transition-all duration-200 ease-out">
                     {/* ONLY VIEW BUTTON */}
                     <button
                       onClick={() => setSelectedRequest(r)}
-                      className="text-xs text-blue-400 hover:underline">
+                      className="min-h-11 text-xs text-blue-400 hover:underline sm:min-h-0">
                       View
                     </button>
 
@@ -290,18 +298,45 @@ transition-all duration-200 ease-out">
                 </div>
               ))}
             </div>
+            </div>
+            <div className="divide-y divide-fbs-border md:hidden">
+              {paginatedData.map((r) => (
+                <div key={r.id} className="space-y-2 px-4 py-4">
+                  <div className="flex min-w-0 items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">{r.trainerName}</p>
+                      <p className="truncate text-xs text-gray-400">{r.email}</p>
+                    </div>
+                    <StatusBadge status={r.status} />
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    {formatRequestType(r.requestType)} · {timeAgo(r.createdAt)}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setSelectedRequest(r)}
+                      className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-fbs-border text-xs text-blue-400">
+                      View
+                    </button>
+                    {r.status !== "PENDING" && (
+                      <span className="text-xs text-gray-500">Completed</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
       {selectedRequest && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-fbs-card w-[420px] rounded-xl p-5 border border-fbs-border">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="w-full max-w-md rounded-xl border border-fbs-border bg-fbs-card p-4 md:p-5">
             {/* HEADER */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Request Details</h2>
               <button
                 onClick={() => setSelectedRequest(null)}
-                className="text-gray-400 hover:text-white text-sm">
+                className="flex min-h-11 min-w-11 items-center justify-center text-sm text-gray-400 hover:text-white">
                 ✕
               </button>
             </div>
@@ -349,14 +384,14 @@ transition-all duration-200 ease-out">
             </div>
 
             {/* FOOTER */}
-            <div className="flex justify-between items-center mt-5">
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               {/* LEFT: status info (optional but nice UX) */}
               <span className="text-xs text-gray-400">
                 Current Status: {selectedRequest.status}
               </span>
 
               {/* RIGHT: actions */}
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {selectedRequest.status === "PENDING" && (
                   <>
                     <button
@@ -364,7 +399,7 @@ transition-all duration-200 ease-out">
                         handleAction(selectedRequest.id, "approve");
                         setSelectedRequest(null);
                       }}
-                      className="px-3 py-1.5 bg-fbs-green text-black rounded-md hover:opacity-90">
+                      className="min-h-11 rounded-md bg-fbs-green px-3 py-1.5 text-black hover:opacity-90">
                       Approve
                     </button>
 
@@ -373,7 +408,7 @@ transition-all duration-200 ease-out">
                         handleAction(selectedRequest.id, "reject");
                         setSelectedRequest(null);
                       }}
-                      className="px-3 py-1.5 bg-red-500 text-white rounded-md hover:opacity-90">
+                      className="min-h-11 rounded-md bg-red-500 px-3 py-1.5 text-white hover:opacity-90">
                       Reject
                     </button>
                   </>
@@ -381,7 +416,7 @@ transition-all duration-200 ease-out">
 
                 <button
                   onClick={() => setSelectedRequest(null)}
-                  className="px-3 py-1.5 border border-gray-600 rounded">
+                  className="min-h-11 rounded border border-gray-600 px-3 py-1.5">
                   Close
                 </button>
               </div>
@@ -390,7 +425,7 @@ transition-all duration-200 ease-out">
         </div>
       )}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-4 text-sm text-gray-400">
+        <div className="mt-4 flex flex-col gap-3 text-sm text-gray-400 sm:flex-row sm:items-center sm:justify-between">
           <span>
             Page {currentPage} of {totalPages}
           </span>
@@ -399,14 +434,14 @@ transition-all duration-200 ease-out">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => p - 1)}
-              className="px-3 py-1 border border-fbs-border rounded disabled:opacity-40">
+              className="min-h-11 rounded border border-fbs-border px-3 py-1 disabled:opacity-40 sm:min-h-0">
               Prev
             </button>
 
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => p + 1)}
-              className="px-3 py-1 border border-fbs-border rounded disabled:opacity-40">
+              className="min-h-11 rounded border border-fbs-border px-3 py-1 disabled:opacity-40 sm:min-h-0">
               Next
             </button>
           </div>

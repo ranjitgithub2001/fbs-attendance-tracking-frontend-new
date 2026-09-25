@@ -131,7 +131,7 @@ export default function StudentLogin() {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-fbs-dark flex">
+    <div className="flex min-h-screen min-w-0 overflow-x-hidden bg-fbs-dark">
 
       {/* Left Panel */}
       <div className="hidden md:flex w-2/5 bg-fbs-darker flex-col items-center justify-center px-8 relative overflow-hidden flex-shrink-0">
@@ -158,15 +158,15 @@ export default function StudentLogin() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10">
-        <div className="w-full max-w-sm">
+      <div className="flex min-w-0 flex-1 items-center justify-center px-4 py-8 md:px-6 md:py-10">
+        <div className="w-full min-w-0 max-w-sm">
 
           {/* Mobile logo */}
           <div className="flex md:hidden justify-center mb-8">
             <img src={fbsLogo} alt="FBS Logo" className="w-16 h-16 object-contain" />
           </div>
 
-          <div className="bg-fbs-card border border-fbs-border rounded-2xl px-8 py-9">
+          <div className="min-w-0 rounded-2xl border border-fbs-border bg-fbs-card px-4 py-7 md:px-8 md:py-9">
 
             {/* ── Step 1: FRN ── */}
             {step === 'frn' && (
@@ -185,7 +185,7 @@ export default function StudentLogin() {
                       onChange={e => setFrn(e.target.value)}
                       placeholder="FRN-23J1224/001"
                       autoFocus
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors font-mono"
+                      className="w-full min-h-11 bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors font-mono"
                     />
                   </div>
 
@@ -198,7 +198,7 @@ export default function StudentLogin() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm py-2.5 rounded-lg transition-colors disabled:opacity-50"
+                    className="w-full min-h-11 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm py-2.5 rounded-lg transition-colors disabled:opacity-50"
                   >
                     {loading ? 'Sending OTP…' : 'Get OTP'}
                   </button>
@@ -213,7 +213,7 @@ export default function StudentLogin() {
               <>
                 <button
                   onClick={() => { setStep('frn'); setError(''); setOtp(['','','','','','']); }}
-                  className="flex items-center gap-2 text-gray-500 hover:text-white text-xs mb-5 transition-colors"
+                  className="mb-5 flex min-h-11 items-center gap-2 text-xs text-gray-500 transition-colors hover:text-white"
                 >
                   <Icon d={ICONS.back} size={14} /> Back
                 </button>
@@ -225,7 +225,7 @@ export default function StudentLogin() {
 
                 <form onSubmit={handleOtpSubmit} noValidate>
                   {/* OTP boxes */}
-                  <div className="flex gap-2 justify-between mb-5" onPaste={handleOtpPaste}>
+                  <div className="mb-5 flex gap-1.5 md:gap-2 md:justify-between" onPaste={handleOtpPaste}>
                     {otp.map((digit, i) => (
                       <input
                         key={i}
@@ -236,7 +236,7 @@ export default function StudentLogin() {
                         value={digit}
                         onChange={e => handleOtpChange(i, e.target.value)}
                         onKeyDown={e => handleOtpKeyDown(i, e)}
-                        className="w-11 h-12 text-center text-white text-lg font-bold bg-fbs-dark border border-fbs-border rounded-lg outline-none focus:border-fbs-green transition-colors"
+                        className="h-11 min-w-0 flex-1 basis-0 text-center text-lg font-bold text-white bg-fbs-dark border border-fbs-border rounded-lg outline-none focus:border-fbs-green transition-colors md:h-12 md:w-11 md:flex-none md:basis-auto"
                       />
                     ))}
                   </div>
@@ -250,7 +250,7 @@ export default function StudentLogin() {
                   <button
                     type="submit"
                     disabled={loading || otp.join('').length < 6}
-                    className="w-full bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm py-2.5 rounded-lg transition-colors disabled:opacity-50 mb-4"
+                    className="mb-4 w-full min-h-11 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm py-2.5 rounded-lg transition-colors disabled:opacity-50"
                   >
                     {loading ? 'Verifying…' : 'Verify OTP'}
                   </button>
@@ -266,7 +266,7 @@ export default function StudentLogin() {
                         type="button"
                         onClick={handleResend}
                         disabled={loading}
-                        className="text-fbs-green hover:text-fbs-yellow text-xs font-medium transition-colors disabled:opacity-50"
+                        className="inline-flex min-h-11 items-center text-fbs-green hover:text-fbs-yellow text-xs font-medium transition-colors disabled:opacity-50"
                       >
                         Resend OTP
                       </button>

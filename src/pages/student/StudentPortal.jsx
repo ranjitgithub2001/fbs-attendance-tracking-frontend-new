@@ -64,7 +64,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${type === "success" ? "bg-fbs-card border-fbs-green/30 text-fbs-green" : "bg-fbs-card border-red-500/30 text-red-400"}`}>
       {message}
     </div>
@@ -137,13 +137,13 @@ function DashboardTab({ data }) {
 
   return (
     <div className="space-y-4">
-      <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5">
+      <div className="min-w-0 bg-fbs-card border border-fbs-border rounded-2xl p-4 md:p-5">
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex shrink-0 flex-col items-center gap-1">
             <AttendanceRing pct={pct} />
             <p className="text-blue-400 text-xs">On-time {Number(onTimePct).toFixed(1)}%</p>
           </div>
-          <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
+          <div className="grid w-full min-w-0 flex-1 grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               {
                 label: "Total Classes",
@@ -156,7 +156,7 @@ function DashboardTab({ data }) {
             ].map((c) => (
               <div
                 key={c.label}
-                className="bg-fbs-dark border border-fbs-border rounded-xl p-3 text-center">
+                className="min-w-0 rounded-xl border border-fbs-border bg-fbs-dark p-3 text-center">
                 <p className={`text-2xl font-bold ${c.color}`}>{c.value}</p>
                 <p className="text-gray-500 text-xs mt-0.5">{c.label}</p>
               </div>
@@ -171,9 +171,9 @@ function DashboardTab({ data }) {
           </div>
         )}
       </div>
-      <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
-        <div className="px-5 py-3 border-b border-fbs-border">
-          <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold">
+      <div className="overflow-hidden rounded-2xl border border-fbs-border bg-fbs-card">
+        <div className="border-b border-fbs-border px-4 py-3 md:px-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500">
             Recent Sessions
           </p>
         </div>
@@ -189,7 +189,7 @@ function DashboardTab({ data }) {
               .map((r, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between px-5 py-3">
+                  className="flex items-center justify-between gap-3 px-4 py-3 md:px-5">
                   <p className="text-white text-sm">{fmtDate(r.sessionDate)}</p>
                   <StatusBadge status={r.status} />
                 </div>
@@ -235,30 +235,32 @@ function CalendarTab({ data }) {
 
   return (
     <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-fbs-border">
+      <div className="flex items-center justify-between gap-2 border-b border-fbs-border px-3 py-3 md:px-5 md:py-4">
         <button
           onClick={() => changeMonth(-1)}
-          className="p-1.5 rounded-lg hover:bg-fbs-dark text-gray-400 hover:text-white transition-colors">
+          aria-label="Previous month"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-fbs-dark hover:text-white md:h-auto md:w-auto md:p-1.5">
           <Icon d={ICONS.chevronL} size={16} />
         </button>
-        <p className="text-white font-semibold text-sm">{monthName}</p>
+        <p className="min-w-0 truncate text-center text-sm font-semibold text-white">{monthName}</p>
         <button
           onClick={() => changeMonth(1)}
-          className="p-1.5 rounded-lg hover:bg-fbs-dark text-gray-400 hover:text-white transition-colors">
+          aria-label="Next month"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-fbs-dark hover:text-white md:h-auto md:w-auto md:p-1.5">
           <Icon d={ICONS.chevronR} size={16} />
         </button>
       </div>
-      <div className="p-4">
-        <div className="grid grid-cols-7 mb-2">
+      <div className="min-w-0 p-3 md:p-4">
+        <div className="mb-2 grid min-w-0 grid-cols-7">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
             <div
               key={d}
-              className="text-center text-[10px] text-gray-600 font-semibold py-1">
+              className="min-w-0 py-1 text-center text-[10px] font-semibold text-gray-600">
               {d}
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid min-w-0 grid-cols-7 gap-1">
           {Array.from({ length: firstDay }).map((_, i) => (
             <div key={`e-${i}`} />
           ))}
@@ -269,14 +271,14 @@ function CalendarTab({ data }) {
             return (
               <div
                 key={day}
-                className={`aspect-square flex items-center justify-center rounded-lg border text-xs font-medium
+                className={`flex aspect-square min-w-0 items-center justify-center rounded-lg border text-xs font-medium
                 ${status ? calStyle[status] : "border-transparent text-gray-600"}`}>
                 {day}
               </div>
             );
           })}
         </div>
-        <div className="flex items-center gap-4 mt-4 pt-3 border-t border-fbs-border">
+        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-fbs-border pt-3">
           {[
             { label: "Present", color: "bg-fbs-green" },
             { label: "Absent", color: "bg-red-400" },
@@ -301,9 +303,6 @@ function SessionsTab({ data }) {
   const PAGE_SIZE = 9;
   const sessions = [...(data?.last30Days || [])].reverse();
   const [filter, setFilter] = useState("ALL");
-  useEffect(() => {
-    setPage(1);
-  }, [filter]);
   const counts = {
     ALL: sessions.length,
     PRESENT: sessions.filter((s) => s.status === "PRESENT").length,
@@ -320,16 +319,21 @@ function SessionsTab({ data }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-xl p-1">
+      <div className="min-w-0 overflow-x-auto">
+        <div className="flex w-max min-w-full gap-1 rounded-xl border border-fbs-border bg-fbs-card p-1">
         {["ALL", "PRESENT", "ABSENT", "LATE", "HOLIDAY"].map((f) => (
           <button
             key={f}
-            onClick={() => setFilter(f)}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-colors
+            onClick={() => {
+              setFilter(f);
+              setPage(1);
+            }}
+            className={`min-h-11 shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors md:min-h-0 md:flex-1
               ${filter === f ? "bg-fbs-green text-gray-900" : "text-gray-400 hover:text-white"}`}>
             {f} ({counts[f]})
           </button>
         ))}
+        </div>
       </div>
       <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
         {filtered.length === 0 ? (
@@ -343,7 +347,7 @@ function SessionsTab({ data }) {
               {paginated.map((r, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between px-5 py-3.5">
+                  className="flex items-center justify-between gap-3 px-4 py-3.5 md:px-5">
                   <p className="text-white text-sm">{fmtDate(r.sessionDate)}</p>
                   <StatusBadge status={r.status} />
                 </div>
@@ -351,22 +355,22 @@ function SessionsTab({ data }) {
             </div>
 
             {/* ✅ Pagination UI HERE */}
-            <div className="flex items-center justify-between px-5 py-3 border-t border-fbs-border">
+            <div className="flex items-center justify-between gap-3 border-t border-fbs-border px-4 py-3 md:px-5">
               <button
                 onClick={() => setPage((p) => Math.max(p - 1, 1))}
                 disabled={page === 1}
-                className="text-xs text-gray-400 hover:text-white disabled:opacity-30">
+                className="min-h-11 px-2 text-xs text-gray-400 hover:text-white disabled:opacity-30">
                 Previous
               </button>
 
-              <span className="text-xs text-gray-500">
+              <span className="shrink-0 text-xs text-gray-500">
                 Page {page} of {totalPages || 1}
               </span>
 
               <button
                 onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                 disabled={page === totalPages}
-                className="text-xs text-gray-400 hover:text-white disabled:opacity-30">
+                className="min-h-11 px-2 text-xs text-gray-400 hover:text-white disabled:opacity-30">
                 Next
               </button>
             </div>
@@ -446,7 +450,7 @@ function ConcernTab({ data }) {
         <div className="flex justify-end">
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors">
+            className="flex min-h-11 items-center gap-2 rounded-lg bg-fbs-green px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-fbs-yellow">
             <Icon d={ICONS.plus} size={14} /> Raise Concern
           </button>
         </div>
@@ -460,7 +464,7 @@ function ConcernTab({ data }) {
               <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
                 Type
               </label>
-              <div className="flex gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row">
                 {[
                   {
                     value: "ABSENCE_EXPLANATION",
@@ -474,7 +478,7 @@ function ConcernTab({ data }) {
                     onClick={() =>
                       setForm((p) => ({ ...p, type: t.value, sessionId: "" }))
                     }
-                    className={`flex-1 py-2.5 rounded-lg text-xs font-semibold border transition-colors
+                    className={`min-h-11 flex-1 rounded-lg border py-2.5 text-xs font-semibold transition-colors
                       ${form.type === t.value ? "bg-fbs-green text-gray-900 border-fbs-green" : "bg-fbs-dark border-fbs-border text-gray-400 hover:border-fbs-green/40"}`}>
                     {t.label}
                   </button>
@@ -492,7 +496,7 @@ function ConcernTab({ data }) {
                   onChange={(e) =>
                     setForm((p) => ({ ...p, sessionId: e.target.value }))
                   }
-                  className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-fbs-green cursor-pointer">
+                  className="w-full min-h-11 cursor-pointer rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white outline-none focus:border-fbs-green">
                   <option value="" disabled>
                     Select absent session
                   </option>
@@ -530,13 +534,13 @@ function ConcernTab({ data }) {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-colors">
+                className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-colors hover:text-white">
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 py-2.5 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold rounded-lg text-sm disabled:opacity-50">
+                className="min-h-11 flex-1 rounded-lg bg-fbs-green py-2.5 text-sm font-semibold text-gray-900 hover:bg-fbs-yellow disabled:opacity-50">
                 {submitting ? "Submitting…" : "Submit"}
               </button>
             </div>
@@ -647,44 +651,48 @@ export default function StudentPortal() {
     );
 
   return (
-    <div className="min-h-screen bg-fbs-dark text-white">
-      <header className="bg-fbs-darker border-b border-fbs-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-fbs-card border border-fbs-border rounded-xl flex items-center justify-center">
-            <span className="text-fbs-green text-sm font-bold">
-              {data?.studentName?.charAt(0)?.toUpperCase()}
-            </span>
+    <div className="min-h-screen min-w-0 overflow-x-hidden bg-fbs-dark text-white">
+      <header className="border-b border-fbs-border bg-fbs-darker px-4 py-3 md:px-6 md:py-4">
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-fbs-border bg-fbs-card">
+              <span className="text-sm font-bold text-fbs-green">
+                {data?.studentName?.charAt(0)?.toUpperCase()}
+              </span>
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-white">
+                {data?.studentName}
+              </p>
+              <p className="truncate font-mono text-xs text-gray-500">{data?.frn}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-white text-sm font-semibold">
-              {data?.studentName}
-            </p>
-            <p className="text-gray-500 text-xs font-mono">{data?.frn}</p>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="flex min-h-11 shrink-0 items-center gap-2 rounded-lg border border-fbs-border bg-fbs-card px-3 py-2 text-xs font-medium text-gray-400 transition-colors hover:border-red-900/30 hover:text-red-400 md:min-h-0">
+            <Icon d={ICONS.logout} size={14} /> Logout
+          </button>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-3 py-2 bg-fbs-card border border-fbs-border rounded-lg text-gray-400 hover:text-red-400 hover:border-red-900/30 text-xs font-medium transition-colors">
-          <Icon d={ICONS.logout} size={14} /> Logout
-        </button>
       </header>
 
-      <div className="bg-fbs-darker border-b border-fbs-border px-6">
-        <div className="flex gap-0">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id)}
-              className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold border-b-2 transition-colors
+      <div className="min-w-0 border-b border-fbs-border bg-fbs-darker px-4 md:px-6">
+        <div className="min-w-0 overflow-x-auto">
+          <div className="flex w-max min-w-full gap-0">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setActiveTab(t.id)}
+                className={`flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-4 text-xs font-semibold transition-colors md:min-h-0 md:py-3.5
                 ${activeTab === t.id ? "border-fbs-green text-fbs-green" : "border-transparent text-gray-400 hover:text-white"}`}>
-              <Icon d={t.icon} size={13} />
-              {t.label}
-            </button>
-          ))}
+                <Icon d={t.icon} size={13} />
+                {t.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <main className="max-w-2xl mx-auto px-6 py-6">
+      <main className="mx-auto min-w-0 max-w-2xl px-4 py-5 md:px-6 md:py-6">
         {activeTab === "dashboard" && <DashboardTab data={data} />}
         {activeTab === "calendar" && <CalendarTab data={data} />}
         {activeTab === "sessions" && <SessionsTab data={data} />}

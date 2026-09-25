@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import DashboardLayout from "../../components/DashboardLayout";
 
@@ -56,7 +56,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -92,7 +92,7 @@ function TabBtn({ icon, label, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 whitespace-nowrap
+      className={`flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 md:min-h-0
   ${
     active
       ? "bg-fbs-green text-black shadow-md scale-[1.03]"
@@ -120,10 +120,6 @@ function BatchSummaryTab() {
   const [toDate, setToDate] = useState("");
   const [showTable, setShowTable] = useState(false);
   useEffect(() => {
-    setSessPage(1);
-  }, [selected]);
-
-  useEffect(() => {
     axiosInstance
       .get("/batches")
       .then((r) => setBatches(r.data || []))
@@ -132,6 +128,7 @@ function BatchSummaryTab() {
 
   async function loadBatch(batchId) {
     setSelected(batchId);
+    setSessPage(1);
     setLoading(true);
     try {
       const sessRes = await axiosInstance.get(
@@ -188,21 +185,21 @@ function BatchSummaryTab() {
           </p>
 
           {/* FILTER (moved here) */}
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             <input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="bg-fbs-dark border border-fbs-border rounded px-2 py-1 text-xs text-white"
+              className="min-h-11 rounded border border-fbs-border bg-fbs-dark px-2 py-1 text-xs text-white md:min-h-0"
             />
 
-            <span className="text-gray-500 text-xs">to</span>
+            <span className="text-xs text-gray-500">to</span>
 
             <input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="bg-fbs-dark border border-fbs-border rounded px-2 py-1 text-xs text-white"
+              className="min-h-11 rounded border border-fbs-border bg-fbs-dark px-2 py-1 text-xs text-white md:min-h-0"
             />
 
             {(fromDate || toDate) && (
@@ -211,7 +208,7 @@ function BatchSummaryTab() {
                   setFromDate("");
                   setToDate("");
                 }}
-                className="text-xs text-red-400 hover:underline">
+                className="min-h-11 text-xs text-red-400 hover:underline md:min-h-0">
                 Clear
               </button>
             )}
@@ -225,7 +222,7 @@ function BatchSummaryTab() {
               <button
                 key={b.id}
                 onClick={() => loadBatch(b.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all duration-200
+                className={`min-h-11 rounded-xl border px-4 py-2 text-xs font-semibold transition-all duration-200 md:min-h-0
   ${
     selected === b.id
       ? "bg-fbs-green text-black border-fbs-green shadow-md scale-[1.05]"
@@ -250,7 +247,7 @@ function BatchSummaryTab() {
 
       {selected && !loading && sessionStats.length > 0 && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid min-w-0 grid-cols-2 gap-3 lg:grid-cols-4">
             {[
               {
                 label: "Total Sessions",
@@ -331,7 +328,8 @@ function BatchSummaryTab() {
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="min-w-0">
+              <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-fbs-border">
@@ -345,7 +343,7 @@ function BatchSummaryTab() {
                     ].map((h) => (
                       <th
                         key={h}
-                        className="text-left text-xs text-gray-500 px-5 py-3">
+                        className="px-5 py-3 text-left text-xs text-gray-500">
                         {h}
                       </th>
                     ))}
@@ -359,41 +357,63 @@ function BatchSummaryTab() {
                     )
                     .map((s) => (
                       <tr key={s.id} className="hover:bg-fbs-dark/40">
-                        <td className="px-5 py-3 text-white text-xs">
+                        <td className="px-5 py-3 text-xs text-white">
                           {fmtDate(s.sessionDate)}
                         </td>
-                        <td className="px-5 py-3 text-gray-400 text-xs">
+                        <td className="px-5 py-3 text-xs text-gray-400">
                           {s.trainerName}
                         </td>
-                        <td className="px-5 py-3 text-fbs-green text-xs">
+                        <td className="px-5 py-3 text-xs text-fbs-green">
                           {s.present}
                         </td>
-                        <td className="px-5 py-3 text-red-400 text-xs">
+                        <td className="px-5 py-3 text-xs text-red-400">
                           {s.absent}
                         </td>
-                        <td className="px-5 py-3 text-yellow-400 text-xs">
+                        <td className="px-5 py-3 text-xs text-yellow-400">
                           {s.late}
                         </td>
-                        <td className="px-5 py-3 w-40">
+                        <td className="w-40 px-5 py-3">
                           <MiniBar value={s.pct} />
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </table>
+              </div>
+              <div className="divide-y divide-fbs-border md:hidden">
+                {filteredStats
+                  .slice(
+                    (sessPage - 1) * SESS_PAGE_SIZE,
+                    sessPage * SESS_PAGE_SIZE,
+                  )
+                  .map((s) => (
+                    <div key={s.id} className="space-y-2 px-4 py-3.5">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-xs font-medium text-white">{fmtDate(s.sessionDate)}</p>
+                          <p className="truncate text-xs text-gray-400">{s.trainerName}</p>
+                        </div>
+                        <p className="shrink-0 text-xs text-gray-400">
+                          P {s.present} · A {s.absent} · L {s.late}
+                        </p>
+                      </div>
+                      <MiniBar value={s.pct} />
+                    </div>
+                  ))}
+              </div>
                     
               {filteredStats.length > SESS_PAGE_SIZE && (
-                <div className="flex items-center justify-between px-5 py-3 border-t border-fbs-border">
-                  <p className="text-gray-600 text-xs">
+                <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-5">
+                  <p className="text-xs text-gray-600">
                     {(sessPage - 1) * SESS_PAGE_SIZE + 1}–
                     {Math.min(sessPage * SESS_PAGE_SIZE, filteredStats.length)}{" "}
                     of {filteredStats.length} sessions
                   </p>
-                  <div className="flex gap-1">
+                  <div className="flex min-w-0 flex-wrap gap-1">
                     <button
                       onClick={() => setSessPage((p) => Math.max(1, p - 1))}
                       disabled={sessPage === 1}
-                      className="px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30">
+                      className="min-h-11 px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30 md:min-h-0">
                       ←
                     </button>
 
@@ -406,7 +426,7 @@ function BatchSummaryTab() {
                       <button
                         key={p}
                         onClick={() => setSessPage(p)}
-                        className={`w-7 h-7 rounded text-xs font-medium ${sessPage === p ? "bg-fbs-green text-black" : "bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white"}`}>
+                        className={`min-h-11 min-w-11 rounded text-xs font-medium md:h-7 md:min-h-0 md:w-7 md:min-w-0 ${sessPage === p ? "bg-fbs-green text-black" : "bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white"}`}>
                         {p}
                       </button>
                     ))}
@@ -424,7 +444,7 @@ function BatchSummaryTab() {
                         sessPage ===
                         Math.ceil(sessionStats.length / SESS_PAGE_SIZE)
                       }
-                      className="px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30">
+                      className="min-h-11 px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30 md:min-h-0">
                       →
                     </button>
                   </div>
@@ -551,7 +571,7 @@ function StudentReportTab() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
       <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
         <div className="p-4 border-b border-fbs-border">
           <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold mb-3">
@@ -566,7 +586,7 @@ function StudentReportTab() {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg pl-8 pr-3 py-2 text-white text-xs placeholder-gray-600 outline-none focus:border-fbs-green"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark py-2 pl-8 pr-3 text-xs text-white placeholder-gray-600 outline-none focus:border-fbs-green"
             />
           </div>
         </div>
@@ -578,10 +598,10 @@ function StudentReportTab() {
               <button
                 key={s.id}
                 onClick={() => loadStudent(s)}
-                className={`w-full text-left px-4 py-3 hover:bg-fbs-dark transition-colors ${selected?.id === s.id ? "bg-fbs-dark border-l-2 border-fbs-green" : ""}`}>
-                <p className="text-white text-sm font-medium">{s.fullName}</p>
-                <p className="text-gray-500 text-xs font-mono">{s.frn}</p>
-                <p className="text-gray-600 text-xs">{s.batchName}</p>
+                className={`w-full min-w-0 text-left px-4 py-3 hover:bg-fbs-dark transition-colors ${selected?.id === s.id ? "bg-fbs-dark border-l-2 border-fbs-green" : ""}`}>
+                <p className="truncate text-sm font-medium text-white">{s.fullName}</p>
+                <p className="truncate font-mono text-xs text-gray-500">{s.frn}</p>
+                <p className="truncate text-xs text-gray-600">{s.batchName}</p>
               </button>
             ))
           )}
@@ -596,30 +616,30 @@ function StudentReportTab() {
         ) : (
           <>
             <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <p className="text-white font-semibold">
+              <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-white">
                     {selected.fullName}
                   </p>
-                  <p className="text-gray-500 text-xs font-mono">
+                  <p className="truncate font-mono text-xs text-gray-500">
                     {selected.frn} · {selected.batchName}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 gap-2">
                   <button
                     onClick={exportCSV}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-fbs-dark border border-fbs-border rounded-lg text-xs text-gray-300 hover:border-fbs-green hover:text-fbs-green transition-colors">
+                    className="flex min-h-11 items-center gap-1.5 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-300 transition-colors hover:border-fbs-green hover:text-fbs-green md:min-h-0">
                     <Icon d={ICONS.download} size={12} /> CSV
                   </button>
                   <button
                     onClick={exportPDF}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-fbs-dark border border-fbs-border rounded-lg text-xs text-gray-300 hover:border-fbs-green hover:text-fbs-green transition-colors">
+                    className="flex min-h-11 items-center gap-1.5 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-300 transition-colors hover:border-fbs-green hover:text-fbs-green md:min-h-0">
                     <Icon d={ICONS.download} size={12} /> PDF
                   </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="mb-4 grid min-w-0 grid-cols-2 gap-3 md:grid-cols-4">
                 {[
                   {
                     label: "Total",
@@ -649,7 +669,7 @@ function StudentReportTab() {
 
               <MiniBar value={Number(attendancePct)} />
 
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-4 items-end">
                 <div className="flex-1">
                   <label className="text-xs text-gray-500 mb-1 block">
                     From
@@ -658,7 +678,7 @@ function StudentReportTab() {
                     type="date"
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
-                    className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-fbs-green"
+                    className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-xs text-white outline-none focus:border-fbs-green"
                   />
                 </div>
                 <div className="flex-1">
@@ -667,7 +687,7 @@ function StudentReportTab() {
                     type="date"
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
-                    className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-fbs-green"
+                    className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-2 text-xs text-white outline-none focus:border-fbs-green"
                   />
                 </div>
               </div>
@@ -691,7 +711,7 @@ function StudentReportTab() {
                     filteredRecords.map((r) => (
                       <div
                         key={r.id}
-                        className="flex items-center justify-between px-5 py-3">
+                        className="flex items-center justify-between gap-3 px-4 py-3 md:px-5">
                         <span className="text-white text-xs">
                           {fmtDate(r.sessionDate)}
                         </span>
@@ -725,10 +745,6 @@ function LowAttendanceTab() {
   const [toast, setToast] = useState({ msg: "", type: "success" });
   const [lowPage, setLowPage] = useState(1);
   const LOW_PAGE_SIZE = 8;
-
-  useEffect(() => {
-    setLowPage(1);
-  }, [threshold]);
 
   function showToast(msg, type = "success") {
     setToast({ msg, type });
@@ -814,7 +830,10 @@ function LowAttendanceTab() {
             max="95"
             step="5"
             value={threshold}
-            onChange={(e) => setThreshold(Number(e.target.value))}
+            onChange={(e) => {
+              setThreshold(Number(e.target.value));
+              setLowPage(1);
+            }}
             className="w-full accent-fbs-green"
           />
           <div className="flex justify-between text-[10px] text-gray-600 mt-1">
@@ -831,7 +850,7 @@ function LowAttendanceTab() {
             placeholder="Search student..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-fbs-dark border border-fbs-border rounded-lg pl-8 pr-3 py-2.5 text-white text-xs placeholder-gray-600 outline-none focus:border-fbs-green"
+            className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 pl-8 pr-3 text-xs text-white placeholder-gray-600 outline-none focus:border-fbs-green"
           />
         </div>
       </div>
@@ -850,7 +869,8 @@ function LowAttendanceTab() {
             No students below {threshold}% threshold
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="min-w-0">
+            <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-fbs-border">
@@ -864,7 +884,7 @@ function LowAttendanceTab() {
                   ].map((h) => (
                     <th
                       key={h}
-                      className="text-left text-xs text-gray-500 px-5 py-3">
+                      className="px-5 py-3 text-left text-xs text-gray-500">
                       {h}
                     </th>
                   ))}
@@ -875,19 +895,19 @@ function LowAttendanceTab() {
                   .slice((lowPage - 1) * LOW_PAGE_SIZE, lowPage * LOW_PAGE_SIZE)
                   .map((s) => (
                     <tr key={s.id} className="hover:bg-fbs-dark/40">
-                      <td className="px-5 py-3.5 text-white font-medium text-sm">
+                      <td className="px-5 py-3.5 text-sm font-medium text-white">
                         {s.fullName}
                       </td>
-                      <td className="px-5 py-3.5 text-gray-400 text-xs font-mono">
+                      <td className="px-5 py-3.5 font-mono text-xs text-gray-400">
                         {s.frn}
                       </td>
-                      <td className="px-5 py-3.5 text-gray-400 text-xs">
+                      <td className="px-5 py-3.5 text-xs text-gray-400">
                         {s.batchName}
                       </td>
-                      <td className="px-5 py-3.5 text-gray-400 text-xs">
+                      <td className="px-5 py-3.5 text-xs text-gray-400">
                         {s.present}/{s.total}
                       </td>
-                      <td className="px-5 py-3.5 w-36">
+                      <td className="w-36 px-5 py-3.5">
                         <MiniBar
                           value={s.pct}
                           color={s.pct < 50 ? "#f87171" : "#facc15"}
@@ -898,7 +918,7 @@ function LowAttendanceTab() {
                           onClick={() =>
                             setAlertModal({ id: s.id, name: s.fullName })
                           }
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-fbs-green text-black text-xs font-semibold rounded-lg hover:bg-fbs-green/90 transition-colors">
+                          className="flex items-center gap-1.5 rounded-lg bg-fbs-green px-3 py-1.5 text-xs font-semibold text-black transition-colors hover:bg-fbs-green/90">
                           <Icon d={ICONS.alert} size={11} /> Send Alert
                         </button>
                       </td>
@@ -906,19 +926,46 @@ function LowAttendanceTab() {
                   ))}
               </tbody>
             </table>
+            </div>
+            <div className="divide-y divide-fbs-border md:hidden">
+              {filtered
+                .slice((lowPage - 1) * LOW_PAGE_SIZE, lowPage * LOW_PAGE_SIZE)
+                .map((s) => (
+                  <div key={s.id} className="space-y-3 px-4 py-4">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">{s.fullName}</p>
+                      <p className="truncate font-mono text-xs text-gray-400">{s.frn}</p>
+                      <p className="truncate text-xs text-gray-400">
+                        {s.batchName} · {s.present}/{s.total} sessions
+                      </p>
+                    </div>
+                    <MiniBar
+                      value={s.pct}
+                      color={s.pct < 50 ? "#f87171" : "#facc15"}
+                    />
+                    <button
+                      onClick={() =>
+                        setAlertModal({ id: s.id, name: s.fullName })
+                      }
+                      className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-fbs-green px-3 py-2 text-xs font-semibold text-black">
+                      <Icon d={ICONS.alert} size={11} /> Send Alert
+                    </button>
+                  </div>
+                ))}
+            </div>
             {filtered.length > LOW_PAGE_SIZE && (
-              <div className="flex items-center justify-between px-5 py-3 border-t border-fbs-border">
-                <p className="text-gray-600 text-xs">
+              <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-5">
+                <p className="text-xs text-gray-600">
                   {(lowPage - 1) * LOW_PAGE_SIZE + 1}–
                   {Math.min(lowPage * LOW_PAGE_SIZE, filtered.length)} of{" "}
                   {filtered.length} students
                 </p>
 
-                <div className="flex gap-1">
+                <div className="flex min-w-0 flex-wrap gap-1">
                   <button
                     onClick={() => setLowPage((p) => Math.max(1, p - 1))}
                     disabled={lowPage === 1}
-                    className="px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30">
+                    className="min-h-11 px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30 md:min-h-0">
                     ←
                   </button>
 
@@ -929,7 +976,7 @@ function LowAttendanceTab() {
                     <button
                       key={p}
                       onClick={() => setLowPage(p)}
-                      className={`w-7 h-7 rounded text-xs font-medium ${lowPage === p ? "bg-fbs-green text-black" : "bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white"}`}>
+                      className={`min-h-11 min-w-11 rounded text-xs font-medium md:h-7 md:min-h-0 md:w-7 md:min-w-0 ${lowPage === p ? "bg-fbs-green text-black" : "bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white"}`}>
                       {p}
                     </button>
                   ))}
@@ -946,7 +993,7 @@ function LowAttendanceTab() {
                     disabled={
                       lowPage === Math.ceil(filtered.length / LOW_PAGE_SIZE)
                     }
-                    className="px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30">
+                    className="min-h-11 px-3 py-1 bg-fbs-dark border border-fbs-border rounded text-xs text-gray-400 hover:text-white disabled:opacity-30 md:min-h-0">
                     →
                   </button>
                 </div>
@@ -989,16 +1036,16 @@ function LowAttendanceTab() {
                 />
               </div>
             </div>
-            <div className="flex gap-3 justify-end">
+            <div className="flex justify-end gap-3">
               <button
                 onClick={() => setAlertModal(null)}
-                className="px-4 py-2 text-gray-400 hover:text-white text-sm transition-colors">
+                className="min-h-11 px-4 py-2 text-sm text-gray-400 transition-colors hover:text-white">
                 Cancel
               </button>
               <button
                 onClick={sendAlert}
                 disabled={alertSending}
-                className="bg-fbs-green text-black text-sm font-semibold px-4 py-2 rounded-lg hover:bg-fbs-green/90 transition-colors disabled:opacity-50">
+                className="min-h-11 rounded-lg bg-fbs-green px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-fbs-green/90 disabled:opacity-50">
                 {alertSending ? "Sending..." : "Send Alert"}
               </button>
             </div>
@@ -1078,7 +1125,7 @@ function MonthlyCalendarTab() {
   });
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-3">
       <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden h-[500px] flex flex-col">
         <div className="p-4 border-b border-fbs-border">
           <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold mb-3">
@@ -1093,7 +1140,7 @@ function MonthlyCalendarTab() {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg pl-8 pr-3 py-2 text-white text-xs placeholder-gray-600 outline-none focus:border-fbs-green"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark py-2 pl-8 pr-3 text-xs text-white placeholder-gray-600 outline-none focus:border-fbs-green"
             />
           </div>
         </div>
@@ -1105,9 +1152,9 @@ function MonthlyCalendarTab() {
               <button
                 key={s.id}
                 onClick={() => loadStudent(s)}
-                className={`w-full text-left px-4 py-3 hover:bg-fbs-dark transition-colors ${selected?.id === s.id ? "bg-fbs-dark border-l-2 border-fbs-green" : ""}`}>
-                <p className="text-white text-sm font-medium">{s.fullName}</p>
-                <p className="text-gray-500 text-xs font-mono">{s.frn}</p>
+                className={`w-full min-w-0 text-left px-4 py-3 hover:bg-fbs-dark transition-colors ${selected?.id === s.id ? "bg-fbs-dark border-l-2 border-fbs-green" : ""}`}>
+                <p className="truncate text-sm font-medium text-white">{s.fullName}</p>
+                <p className="truncate font-mono text-xs text-gray-500">{s.frn}</p>
               </button>
             ))
           )}
@@ -1121,10 +1168,11 @@ function MonthlyCalendarTab() {
           </div>
         ) : (
           <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-fbs-border">
+            <div className="flex items-center justify-between gap-2 border-b border-fbs-border px-3 py-3 md:px-5 md:py-4">
               <button
                 onClick={() => changeMonth(-1)}
-                className="p-1.5 rounded-lg hover:bg-fbs-dark text-gray-400 hover:text-white transition-colors">
+                aria-label="Previous month"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-fbs-dark hover:text-white md:h-auto md:w-auto md:p-1.5">
                 <svg
                   width="16"
                   height="16"
@@ -1135,10 +1183,11 @@ function MonthlyCalendarTab() {
                   <path d="M15 18l-6-6 6-6" />
                 </svg>
               </button>
-              <p className="text-white font-semibold text-sm">{monthName}</p>
+              <p className="min-w-0 truncate text-center text-sm font-semibold text-white">{monthName}</p>
               <button
                 onClick={() => changeMonth(1)}
-                className="p-1.5 rounded-lg hover:bg-fbs-dark text-gray-400 hover:text-white transition-colors">
+                aria-label="Next month"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-fbs-dark hover:text-white md:h-auto md:w-auto md:p-1.5">
                 <Icon d={ICONS.chevron} size={16} />
               </button>
             </div>
@@ -1146,19 +1195,19 @@ function MonthlyCalendarTab() {
             {loading ? (
               <Spinner />
             ) : (
-              <div className="p-4 overflow-y-auto">
-                <div className="grid grid-cols-7 mb-2">
+              <div className="min-w-0 overflow-y-auto p-3 md:p-4">
+                <div className="mb-2 grid min-w-0 grid-cols-7">
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
                     (d) => (
                       <div
                         key={d.slice(0, 2)}
-                        className="text-center text-[10px] text-gray-600 font-semibold py-1">
+                        className="min-w-0 py-1 text-center text-[10px] font-semibold text-gray-600">
                         {d.slice(0, 2)}
                       </div>
                     ),
                   )}
                 </div>
-                <div className="grid grid-cols-7 gap-1.5">
+                <div className="grid min-w-0 grid-cols-7 gap-1">
                   {Array.from({ length: firstDay }).map((_, i) => (
                     <div key={`e-${i}`} />
                   ))}
@@ -1169,7 +1218,7 @@ function MonthlyCalendarTab() {
                     return (
                       <div
                         key={day}
-                        className={`h-9 flex flex-col items-center justify-center rounded border text-[11px] font-medium
+                        className={`flex h-9 min-w-0 flex-col items-center justify-center rounded border text-[11px] font-medium
     ${status ? statusStyle[status] : "border-fbs-border text-gray-600"}`}>
                         <span>{day}</span>
                         {status && (
@@ -1181,7 +1230,7 @@ function MonthlyCalendarTab() {
                     );
                   })}
                 </div>
-                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-fbs-border">
+                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-fbs-border pt-4">
                   {[
                     { label: "Present", color: "bg-fbs-green" },
                     { label: "Absent", color: "bg-red-400" },
@@ -1241,7 +1290,8 @@ export default function Reports() {
     <DashboardLayout
       pageTitle="Reports"
       pageSubtitle="Attendance analytics & insights">
-      <div className="flex gap-1 bg-fbs-card border border-fbs-border rounded-2xl p-1.5 mb-6 overflow-x-auto">
+      <div className="mb-6 min-w-0 overflow-x-auto">
+        <div className="flex w-max min-w-full gap-1 rounded-2xl border border-fbs-border bg-fbs-card p-1.5">
         {TABS.map((t) => (
           <TabBtn
             key={t.id}
@@ -1251,8 +1301,11 @@ export default function Reports() {
             onClick={() => setActiveTab(t.id)}
           />
         ))}
+        </div>
       </div>
-      {ActiveComponent && <ActiveComponent />}
+      <div className="min-w-0">
+        {ActiveComponent && <ActiveComponent />}
+      </div>
     </DashboardLayout>
   );
 }

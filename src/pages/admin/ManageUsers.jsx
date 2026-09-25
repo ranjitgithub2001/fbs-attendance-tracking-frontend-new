@@ -44,7 +44,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-5 py-3.5 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -178,12 +178,12 @@ function UserModal({ user, onClose, onSave }) {
               value={form.username}
               onChange={(e) => set("username", e.target.value)}
               placeholder="John Trainer"
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-all duration-200 ease-out"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-all duration-200 ease-out focus:border-fbs-green"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
               Email Address
             </label>
             <input
@@ -191,7 +191,7 @@ function UserModal({ user, onClose, onSave }) {
               value={form.email}
               onChange={(e) => set("email", e.target.value)}
               placeholder="trainer@fbs.com"
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-all duration-200 ease-out"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-all duration-200 ease-out focus:border-fbs-green"
             />
           </div>
 
@@ -210,7 +210,7 @@ function UserModal({ user, onClose, onSave }) {
                 value={form.password}
                 onChange={(e) => set("password", e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 pr-10 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-all duration-200 ease-out"
+                className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 pr-10 text-sm text-white placeholder-gray-600 outline-none transition-all duration-200 ease-out focus:border-fbs-green"
               />
               <button
                 type="button"
@@ -231,11 +231,11 @@ function UserModal({ user, onClose, onSave }) {
                   key={r}
                   type="button"
                   onClick={() => set("role", r)}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all duration-200 ease-out
+                  className={`min-h-11 flex-1 rounded-lg border py-2.5 text-sm font-medium transition-all duration-200 ease-out
                     ${
                       form.role === r
-                        ? "bg-fbs-green text-gray-900 border-fbs-green"
-                        : "bg-fbs-dark border-fbs-border text-gray-400 hover:border-fbs-green/40"
+                        ? "border-fbs-green bg-fbs-green text-gray-900"
+                        : "border-fbs-border bg-fbs-dark text-gray-400 hover:border-fbs-green/40"
                     }`}>
                   {r}
                 </button>
@@ -247,13 +247,13 @@ function UserModal({ user, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-all duration-200 ease-out">
+              className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-all duration-200 ease-out hover:text-white">
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2.5 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold rounded-lg text-sm transition-all duration-200 ease-out disabled:opacity-50">
+              className="min-h-11 flex-1 rounded-lg bg-fbs-green py-2.5 text-sm font-semibold text-gray-900 transition-all duration-200 ease-out hover:bg-fbs-yellow disabled:opacity-50">
               {loading ? "Saving..." : isEdit ? "Update User" : "Create User"}
             </button>
           </div>
@@ -279,13 +279,13 @@ function ConfirmModal({ user, onClose, onConfirm, loading }) {
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-all duration-200 ease-out">
+            className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-all duration-200 ease-out hover:text-white">
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="flex-1 py-2.5 bg-red-900/30 hover:bg-red-900/50 border border-red-700/40 text-red-400 rounded-lg text-sm transition-all duration-200 ease-out disabled:opacity-50">
+            className="min-h-11 flex-1 rounded-lg border border-red-700/40 bg-red-900/30 py-2.5 text-sm text-red-400 transition-all duration-200 ease-out hover:bg-red-900/50 disabled:opacity-50">
             {loading ? "Deactivating..." : "Deactivate"}
           </button>
         </div>
@@ -368,44 +368,53 @@ export default function ManageUsers() {
     <DashboardLayout
       pageTitle="Manage Users"
       pageSubtitle="Admins and trainers with system access">
-      {/* Action bar */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setModal("create")}
-          className="flex items-center gap-2 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm px-4 py-2.5 rounded-lg shadow-md hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 hover:brightness-110">
+          className="flex min-h-11 items-center gap-2 rounded-lg bg-fbs-green px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-md transition-all duration-200 hover:scale-105 hover:bg-fbs-yellow hover:shadow-lg hover:brightness-110 active:scale-95">
           <Icon d={ICONS.plus} size={15} />
           Add User
         </button>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <div className="relative flex-1">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
+      <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row">
+        <div className="relative min-w-0 flex-1">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
             <Icon d={ICONS.search} size={14} />
           </span>
           <input
             type="text"
             placeholder="Search by name or email…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-fbs-dark/60 border border-fbs-border rounded-lg pl-10 pr-10 py-2.5 text-white text-sm placeholder-gray-500 outline-none focus:border-fbs-green focus:ring-1 focus:ring-fbs-green/40 transition-all"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark/60 py-2.5 pl-10 pr-10 text-sm text-white placeholder-gray-500 outline-none transition-all focus:border-fbs-green focus:ring-1 focus:ring-fbs-green/40"
           />
           {search && (
             <button
-              onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-all duration-200 ease-out">
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 transition-all duration-200 ease-out hover:text-white">
               <Icon d={ICONS.close} size={14} />
             </button>
           )}
         </div>
 
-        <div className="flex gap-1 bg-fbs-dark/60 border border-fbs-border rounded-xl p-1 backdrop-blur-sm">
+        <div className="-mx-1 overflow-x-auto px-1">
+        <div className="flex w-max min-w-full gap-1 rounded-xl border border-fbs-border bg-fbs-dark/60 p-1 backdrop-blur-sm">
           {["ALL", "ADMIN", "TRAINER"].map((r) => (
             <button
               key={r}
-              onClick={() => setRoleFilter(r)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200
+              onClick={() => {
+                setRoleFilter(r);
+                setPage(1);
+              }}
+              className={`min-h-11 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200
   ${
     roleFilter === r
       ? "bg-fbs-green text-gray-900 shadow-sm scale-105"
@@ -415,6 +424,7 @@ export default function ManageUsers() {
               <span className="ml-1 opacity-60 text-[10px]">({counts[r]})</span>
             </button>
           ))}
+        </div>
         </div>
       </div>
 
@@ -436,8 +446,9 @@ export default function ManageUsers() {
             </>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div>
+            <div className="hidden overflow-x-auto md:block">
+            <table className="w-full min-w-[800px] text-sm">
               <div className="px-6 py-3 border-b border-fbs-border">
                 <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr_0.8fr] items-center text-[11px] text-gray-400 uppercase tracking-widest font-semibold">
                   <div>User</div>
@@ -515,14 +526,58 @@ export default function ManageUsers() {
                 ))}
               </tbody>
             </table>
-            <div className="px-5 py-3 border-t border-fbs-border flex items-center justify-between text-xs text-gray-500">
+            </div>
+            <div className="divide-y divide-fbs-border md:hidden">
+              {paginatedUsers.map((u) => (
+                <div key={u.id} className="space-y-2 px-4 py-4">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-fbs-green/20 bg-fbs-green/10">
+                      <span className="text-xs font-bold text-fbs-green">
+                        {u.username?.charAt(0)?.toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[15px] font-semibold text-white">{u.username}</p>
+                      <p className="truncate text-xs text-gray-500">{u.email}</p>
+                    </div>
+                    <StatusBadge active={u.active} />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <RoleBadge role={u.role} />
+                    <span className="text-xs text-gray-500">
+                      {u.createdAt
+                        ? new Date(u.createdAt).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "—"}
+                    </span>
+                  </div>
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      onClick={() => setModal(u)}
+                      className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-fbs-border text-xs text-gray-300">
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => setConfirmUser(u)}
+                      disabled={!u.active}
+                      className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-red-900/30 text-xs text-red-400 disabled:opacity-30">
+                      Deactivate
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between md:px-5">
               {/* LEFT */}
               <div>
                 Page {page} of {totalPages || 1}
               </div>
 
               {/* RIGHT */}
-              <div className="flex items-center gap-1">
+              <div className="flex flex-wrap items-center gap-1">
                 {/* PREV */}
                 <button
                   onClick={() => setPage((p) => Math.max(p - 1, 1))}

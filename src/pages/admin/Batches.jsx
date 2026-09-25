@@ -41,7 +41,7 @@ function Toast({ message, type = "success" }) {
   if (!message) return null;
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+      className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${
         type === "success"
           ? "bg-fbs-card border-fbs-green/30 text-fbs-green"
@@ -188,14 +188,14 @@ function BatchModal({ batch, onClose, onSave }) {
               value={form.batchName}
               onChange={(e) => set("batchName", e.target.value)}
               placeholder="Java Batch 2025"
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40 transition-all duration-200"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-all duration-200 focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-400 text-[11px] font-semibold uppercase tracking-widest mb-2">
+            <label className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-gray-400">
               FRN Code{" "}
-              <span className="text-gray-500 normal-case tracking-normal font-normal">
+              <span className="font-normal normal-case tracking-normal text-gray-500">
                 (e.g. 23J1224)
               </span>
             </label>
@@ -204,18 +204,18 @@ function BatchModal({ batch, onClose, onSave }) {
               value={form.frnCode}
               onChange={(e) => set("frnCode", e.target.value)}
               placeholder="23J1224"
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40 transition-all duration-200"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-all duration-200 focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-400 text-[11px] font-semibold uppercase tracking-widest mb-2">
+            <label className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-gray-400">
               Technology
             </label>
             <select
               value={form.technology}
               onChange={(e) => set("technology", e.target.value)}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40 transition-all duration-200 cursor-pointer">
+              className="w-full min-h-11 cursor-pointer rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40">
               <option value="" disabled>
                 Select technology
               </option>
@@ -235,7 +235,7 @@ function BatchModal({ batch, onClose, onSave }) {
               type="date"
               value={form.startDate}
               onChange={(e) => set("startDate", e.target.value)}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40 transition-all duration-200 cursor-pointer"
+              className="w-full min-h-11 cursor-pointer rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-fbs-green focus:ring-2 focus:ring-fbs-green/40"
             />
             {form.startDate && (
               <p className="text-gray-500 text-xs mt-1">
@@ -252,13 +252,13 @@ function BatchModal({ batch, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-all duration-200">
+              className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-all duration-200 hover:text-white">
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2.5 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold rounded-lg text-sm transition-all duration-200 disabled:opacity-50">
+              className="min-h-11 flex-1 rounded-lg bg-fbs-green py-2.5 text-sm font-semibold text-gray-900 transition-all duration-200 hover:bg-fbs-yellow disabled:opacity-50">
               {loading ? "Saving..." : isEdit ? "Update Batch" : "Create Batch"}
             </button>
           </div>
@@ -344,7 +344,7 @@ function EndBatchModal({ batch, onClose, onSave }) {
               max={today}
               min={batch?.startDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm outline-none focus:border-fbs-green transition-all duration-200"
+              className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-fbs-green"
             />
           </div>
 
@@ -352,13 +352,13 @@ function EndBatchModal({ batch, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 bg-fbs-dark border border-fbs-border text-gray-400 hover:text-white rounded-lg text-sm transition-all duration-200">
+              className="min-h-11 flex-1 rounded-lg border border-fbs-border bg-fbs-dark py-2.5 text-sm text-gray-400 transition-all duration-200 hover:text-white">
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2.5 bg-red-900/30 hover:bg-red-900/50 border border-red-700/40 text-red-400 font-semibold rounded-lg text-sm transition-all duration-200 disabled:opacity-50">
+              className="min-h-11 flex-1 rounded-lg border border-red-700/40 bg-red-900/30 py-2.5 text-sm font-semibold text-red-400 transition-all duration-200 hover:bg-red-900/50 disabled:opacity-50">
               {loading ? "Ending..." : "End Batch"}
             </button>
           </div>
@@ -402,10 +402,6 @@ export default function Batches() {
   useEffect(() => {
     fetchBatches();
   }, []);
-  useEffect(() => {
-    setPage(1);
-  }, [search, statusFilter, techFilter]);
-
   // ── Derived data ─────────────────────────────────────────────────────────────
   const technologies = [
     "ALL",
@@ -470,20 +466,19 @@ export default function Batches() {
     <DashboardLayout
       pageTitle="Batches"
       pageSubtitle="Manage all training batches">
-      {/* Action bar */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setModal("create")}
-          className="flex items-center gap-2 bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm px-4 py-2.5 rounded-lg transition-all duration-200">
+          className="flex min-h-11 items-center gap-2 rounded-lg bg-fbs-green px-4 py-2.5 text-sm font-semibold text-gray-900 transition-all duration-200 hover:bg-fbs-yellow">
           <Icon d={ICONS.plus} size={15} />
           Create Batch
         </button>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row">
         {/* Search */}
-        <div className="relative flex-1">
+        <div className="relative min-w-0 flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
             <Icon d={ICONS.search} size={14} />
           </span>
@@ -491,40 +486,54 @@ export default function Batches() {
             type="text"
             placeholder="Search by name, FRN or technology…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-fbs-dark/60 border border-fbs-border rounded-lg pl-10 pr-10 py-2.5 text-white text-sm placeholder-gray-500 outline-none focus:border-fbs-green focus:ring-1 focus:ring-fbs-green/40 transition-all"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark/60 py-2.5 pl-10 pr-10 text-sm text-white placeholder-gray-500 outline-none transition-all focus:border-fbs-green focus:ring-1 focus:ring-fbs-green/40"
           />
           {search && (
             <button
-              onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-all duration-200">
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 transition-all duration-200 hover:text-white">
               <Icon d={ICONS.close} size={14} />
             </button>
           )}
         </div>
 
         {/* Status filter */}
-        <div className="flex gap-1 bg-fbs-dark/60 border border-fbs-border rounded-xl p-1 backdrop-blur-sm">
+        <div className="-mx-1 overflow-x-auto px-1">
+          <div className="flex w-max min-w-full gap-1 rounded-xl border border-fbs-border bg-fbs-dark/60 p-1 backdrop-blur-sm">
           {["ALL", "ACTIVE", "ENDED"].map((s) => (
             <button
               key={s}
-              onClick={() => setStatusFilter(s)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200
+              onClick={() => {
+                setStatusFilter(s);
+                setPage(1);
+              }}
+              className={`min-h-11 rounded-md px-3 py-1.5 text-xs font-semibold transition-all duration-200
                 ${
                   statusFilter === s
                     ? "bg-fbs-green text-gray-900 shadow-sm scale-105"
-                    : "text-gray-400 hover:text-white hover:bg-fbs-card/60"
+                    : "text-gray-400 hover:bg-fbs-card/60 hover:text-white"
                 }`}>
               {s} <span className="ml-1 opacity-70">({counts[s]})</span>
             </button>
           ))}
+          </div>
         </div>
 
         {/* Tech filter */}
         <select
           value={techFilter}
-          onChange={(e) => setTechFilter(e.target.value)}
-          className="bg-fbs-dark/60 border border-fbs-border rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-fbs-green focus:ring-1 focus:ring-fbs-green/40 transition-all cursor-pointer">
+          onChange={(e) => {
+            setTechFilter(e.target.value);
+            setPage(1);
+          }}
+          className="min-h-11 cursor-pointer rounded-lg border border-fbs-border bg-fbs-dark/60 px-3 py-2 text-xs text-white outline-none transition-all focus:border-fbs-green focus:ring-1 focus:ring-fbs-green/40">
           {technologies.map((t) => (
             <option key={t} value={t}>
               {t === "ALL" ? "All Technologies" : t}
@@ -542,8 +551,9 @@ export default function Batches() {
             {search ? "No batches match your search" : "No batches found"}
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <div>
+            <div className="hidden overflow-x-auto md:block">
+            <table className="w-full min-w-[960px] text-sm">
               <div className="px-6 py-3 border-b border-fbs-border">
                 <div className="grid grid-cols-[2.5fr_1fr_1fr_0.8fr_1.2fr_1.2fr_1fr_0.8fr] items-center text-[11px] text-gray-400 uppercase tracking-widest font-semibold">
                   <div>Batch</div>
@@ -623,12 +633,47 @@ export default function Batches() {
                 ))}
               </tbody>
             </table>
-            <div className="px-5 py-3 border-t border-fbs-border flex items-center justify-between text-xs text-gray-500">
+            </div>
+            <div className="divide-y divide-fbs-border md:hidden">
+              {paginatedBatches.map((b) => (
+                <div key={b.id} className="space-y-2 px-4 py-4">
+                  <div className="flex min-w-0 items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-white">{b.batchName}</p>
+                      <p className="mt-1 font-mono text-xs text-gray-300">{b.frnCode}</p>
+                    </div>
+                    <StatusBadge active={b.active} />
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    {b.technology} · {b.year}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {formatDate(b.startDate)} – {formatDate(b.endDate)}
+                  </p>
+                  <div className="flex gap-2 pt-1">
+                    <button
+                      onClick={() => setModal(b)}
+                      className="flex min-h-11 flex-1 items-center justify-center rounded-lg border border-fbs-border text-xs text-gray-300">
+                      Edit
+                    </button>
+                    {b.active && (
+                      <button
+                        onClick={() => setEndModal(b)}
+                        className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-900/30 bg-red-900/10 text-xs font-semibold text-red-400">
+                        <Icon d={ICONS.end} size={14} />
+                        End
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between md:px-5">
               <div>
                 Page {page} of {totalPages || 1}
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex flex-wrap items-center gap-1">
                 {/* PREV */}
                 <button
                   onClick={() => setPage((p) => Math.max(p - 1, 1))}

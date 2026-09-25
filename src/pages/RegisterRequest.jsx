@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import fbsLogo from "../assets/fbs-logo.png";
 
 export default function RegisterRequest() {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -36,10 +35,6 @@ export default function RegisterRequest() {
       setError("Phone number is required");
       return;
     }
-    if (!form.department.trim()) {
-      setError("Department is required");
-      return;
-    }
 
     setLoading(true);
     try {
@@ -62,19 +57,8 @@ export default function RegisterRequest() {
     }
   }
 
-  const DEPARTMENTS = [
-    "Java / Spring Boot",
-    "Python / Django",
-    "React / Frontend",
-    "Angular",
-    "Node.js",
-    "Data Science / ML",
-    "DevOps / Cloud",
-    "Other",
-  ];
-
   return (
-    <div className="min-h-screen bg-fbs-dark flex">
+    <div className="flex min-h-screen min-w-0 overflow-x-hidden bg-fbs-dark">
       {/* Left Panel */}
       <div className="hidden md:flex w-2/5 bg-fbs-darker flex-col items-center justify-center px-8 relative overflow-hidden flex-shrink-0">
         <div className="absolute top-0 left-0 w-2 h-full bg-fbs-yellow" />
@@ -120,8 +104,8 @@ export default function RegisterRequest() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10 min-h-screen">
-        <div className="w-full max-w-sm">
+      <div className="flex min-h-screen min-w-0 flex-1 items-center justify-center px-4 py-8 md:px-6 md:py-10">
+        <div className="w-full min-w-0 max-w-sm">
           {/* Mobile logo */}
           <div className="flex md:hidden justify-center mb-8">
             <img
@@ -131,7 +115,7 @@ export default function RegisterRequest() {
             />
           </div>
 
-          <div className="bg-fbs-card border border-fbs-border rounded-2xl px-8 py-9">
+          <div className="min-w-0 rounded-2xl border border-fbs-border bg-fbs-card px-4 py-7 md:px-8 md:py-9">
             {/* ── Success state ── */}
             {submitted ? (
               <div className="text-center py-4">
@@ -155,7 +139,7 @@ export default function RegisterRequest() {
                 </p>
                 <Link
                   to="/login"
-                  className="block w-full bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm py-2.5 rounded-lg transition-colors text-center">
+                  className="block min-h-11 w-full rounded-lg bg-fbs-green py-2.5 text-center text-sm font-semibold text-gray-900 transition-colors hover:bg-fbs-yellow">
                   Back to Login
                 </Link>
               </div>
@@ -175,7 +159,6 @@ export default function RegisterRequest() {
                 )}
 
                 <form onSubmit={handleSubmit} noValidate>
-                  {/* Full Name */}
                   <div className="mb-4">
                     <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
                       Full Name
@@ -185,12 +168,11 @@ export default function RegisterRequest() {
                       value={form.fullName}
                       onChange={(e) => set("fullName", e.target.value)}
                       placeholder="Rahul Sharma"
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                      className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                     />
                   </div>
-                  {/* Email */}
                   <div className="mb-4">
-                    <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                       Email Address
                     </label>
                     <input
@@ -198,12 +180,11 @@ export default function RegisterRequest() {
                       value={form.email}
                       onChange={(e) => set("email", e.target.value)}
                       placeholder="trainer@fbs.com"
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                      className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                     />
                   </div>
-                  {/* Phone */}
                   <div className="mb-4">
-                    <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                       Phone Number
                     </label>
                     <input
@@ -211,12 +192,11 @@ export default function RegisterRequest() {
                       value={form.phone}
                       onChange={(e) => set("phone", e.target.value)}
                       placeholder="+91 98765 43210"
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                      className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                     />
                   </div>
-                  {/* Qualification */}
                   <div className="mb-4">
-                    <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                       Qualification
                     </label>
                     <input
@@ -224,11 +204,11 @@ export default function RegisterRequest() {
                       value={form.qualification}
                       onChange={(e) => set("qualification", e.target.value)}
                       placeholder="e.g. B.Tech, MCA, BCA"
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                      className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                       Expertise / Subject
                     </label>
                     <input
@@ -236,13 +216,11 @@ export default function RegisterRequest() {
                       value={form.expertise}
                       onChange={(e) => set("expertise", e.target.value)}
                       placeholder="e.g. Java, React, Python"
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors"
+                      className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                     />
                   </div>
-
-                  {/* Reason */}
                   <div className="mb-6">
-                    <label className="block text-fbs-green text-xs font-semibold uppercase tracking-widest mb-2">
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-fbs-green">
                       Reason / Message
                     </label>
                     <textarea
@@ -250,13 +228,13 @@ export default function RegisterRequest() {
                       onChange={(e) => set("reason", e.target.value)}
                       placeholder="Briefly describe your role and why you need access..."
                       rows={3}
-                      className="w-full bg-fbs-dark border border-fbs-border rounded-lg px-4 py-2.5 text-white text-sm placeholder-gray-600 outline-none focus:border-fbs-green transition-colors resize-none"
+                      className="w-full min-h-11 resize-none rounded-lg border border-fbs-border bg-fbs-dark px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-fbs-green hover:bg-fbs-yellow text-gray-900 font-semibold text-sm py-2.5 rounded-lg transition-colors disabled:opacity-50">
+                    className="min-h-11 w-full rounded-lg bg-fbs-green py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-fbs-yellow disabled:opacity-50">
                     {loading ? "Submitting..." : "Submit Request"}
                   </button>
                 </form>

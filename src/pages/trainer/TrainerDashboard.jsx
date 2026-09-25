@@ -29,7 +29,7 @@ const ICONS = {
 function Toast({ message, type = 'success' }) {
   if (!message) return null;
   return (
-    <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl border text-sm shadow-lg
+    <div className={`fixed bottom-6 right-4 z-50 max-w-[calc(100%-2rem)] px-4 py-3 rounded-xl border text-sm shadow-lg md:right-6
       ${type === 'success'
         ? 'bg-fbs-card border-fbs-green/30 text-fbs-green'
         : 'bg-fbs-card border-red-500/30 text-red-400'}`}>
@@ -41,12 +41,12 @@ function Toast({ message, type = 'success' }) {
 // ── Stat Card ──────────────────────────────────────────────────────────
 function StatCard({ icon, label, value, suffix = '' }) {
   return (
-    <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5 flex items-center gap-4">
+    <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-fbs-border bg-fbs-card p-4 md:p-5">
       <div className="w-11 h-11 rounded-xl bg-fbs-green/10 border border-fbs-green/20 flex items-center justify-center text-fbs-green shrink-0">
         <Icon d={icon} size={18} />
       </div>
-      <div>
-        <p className="text-xs text-gray-500 mb-0.5">{label}</p>
+      <div className="min-w-0">
+        <p className="mb-0.5 truncate text-xs text-gray-500">{label}</p>
         <p className="text-2xl font-bold text-white">
           {value}
           {suffix && <span className="text-sm text-gray-500 ml-1">{suffix}</span>}
@@ -61,9 +61,9 @@ function AssignedBatchCard({ batch, onMarkAttendance }) {
   return (
     <div className="bg-fbs-card border border-fbs-border rounded-2xl p-5 flex flex-col gap-4 hover:border-fbs-green/30 transition-colors">
       <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-white font-semibold text-sm leading-tight">{batch.batchName}</p>
-          <p className="text-xs text-gray-500 mt-0.5">{batch.frnCode}</p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold leading-tight text-white">{batch.batchName}</p>
+          <p className="mt-0.5 truncate text-xs text-gray-500">{batch.frnCode}</p>
         </div>
         <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-fbs-green/10 border-fbs-green/20 text-fbs-green">
           {batch.technology}
@@ -80,7 +80,7 @@ function AssignedBatchCard({ batch, onMarkAttendance }) {
 
       <button
         onClick={() => onMarkAttendance(batch)}
-        className="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-fbs-green text-black text-xs font-semibold hover:bg-fbs-green/90 transition-colors"
+        className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-fbs-green py-2 text-xs font-semibold text-black transition-colors hover:bg-fbs-green/90"
       >
         <Icon d={ICONS.mark} size={13} />
         Mark Attendance
@@ -180,7 +180,7 @@ export default function TrainerDashboard() {
     <DashboardLayout pageTitle="Dashboard" pageSubtitle="Welcome back, Trainer">
 
       {/* ── Stat Cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="mb-8 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         <StatCard icon={ICONS.batches}    label="Assigned Batches"  value={data?.assignedBatches ?? 0} />
         <StatCard icon={ICONS.students}   label="Total Students"    value={data?.totalStudents ?? 0} />
         <StatCard icon={ICONS.sessions}   label="Sessions Today"    value={data?.sessionsDoneToday ?? 0} />
@@ -214,13 +214,13 @@ export default function TrainerDashboard() {
       {/* ── All Batches ── */}
       <div>
         <h2 className="text-sm font-semibold text-white mb-3">All Batches</h2>
-        <div className="bg-fbs-card border border-fbs-border rounded-2xl overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-fbs-border bg-fbs-card">
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-fbs-border">
                   {['Batch Name', 'FRN Code', 'Technology', 'Year', 'Access'].map(h => (
-                    <th key={h} className="text-left text-xs text-gray-500 px-5 py-3">{h}</th>
+                    <th key={h} className="px-5 py-3 text-left text-xs text-gray-500">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -235,6 +235,33 @@ export default function TrainerDashboard() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="divide-y divide-fbs-border md:hidden">
+            {data?.allBatches?.map(batch => (
+              <div key={batch.id} className="space-y-2 px-4 py-4">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-white">{batch.batchName}</p>
+                  <p className="truncate text-xs text-gray-400">{batch.frnCode} · {batch.technology} · {batch.year}</p>
+                </div>
+                {batch.accessApproved ? (
+                  <span className="flex items-center gap-1 text-xs font-medium text-fbs-green">
+                    <Icon d={ICONS.check} size={12} /> Approved
+                  </span>
+                ) : batch.accessRequested ? (
+                  <span className="flex items-center gap-1 text-xs font-medium text-yellow-400">
+                    <Icon d={ICONS.clock} size={12} /> Pending
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => handleRequestAccess(batch.id)}
+                    disabled={requesting === batch.id}
+                    className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-fbs-border px-3 py-1.5 text-xs text-gray-300 disabled:opacity-50">
+                    <Icon d={ICONS.request} size={12} />
+                    {requesting === batch.id ? 'Requesting...' : 'Request Access'}
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
