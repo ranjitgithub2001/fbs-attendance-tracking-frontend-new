@@ -185,7 +185,9 @@ export default function MyBatches() {
   const [loading, setLoading] = useState(true);
   const [requesting, setRequesting] = useState(null);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [toast, setToast] = useState({ msg: "", type: "success" });
+  const PAGE_SIZE = 10;
 
   function showToast(msg, type = "success") {
     setToast({ msg, type });
@@ -195,18 +197,11 @@ export default function MyBatches() {
   async function fetchBatches() {
     setLoading(true);
     try {
-      const [allRes, accessibleRes] = await Promise.all([
-        axiosInstance.get("/batches"),
-        axiosInstance.get("/batches/accessible"),
-      ]);
-      const accessibleIds = new Set(accessibleRes.data.map((b) => b.id));
-
-      const batches = allRes.data.map((b) => ({
-        ...b,
-        accessApproved: accessibleIds.has(b.id),
-        accessRequested: accessibleIds.has(b.id), // simplification — pending requests need separate API
-      }));
-      setAllBatches(batches || []);
+      // GET /batches is limited to batches this trainer can already access.
+      // The trainer dashboard catalog is the existing list that includes
+      // other batches, with Approved and Pending flags already set.
+      const res = await axiosInstance.get("/trainer/dashboard");
+      setAllBatches(res.data?.allBatches || []);
     } catch {
       showToast("Failed to load batches", "error");
     } finally {
@@ -249,13 +244,32 @@ export default function MyBatches() {
   const accessibleBatches = allBatches.filter((b) => b.accessApproved);
   const noAccessBatches = allBatches.filter((b) => !b.accessApproved);
 
-  // Apply search to no-access section
+  // Apply search to no-access section only so accessible batches stay listed above.
+  const query = search.trim().toLowerCase();
   const filteredNoAccess = noAccessBatches.filter(
     (b) =>
-      b.batchName?.toLowerCase().includes(search.toLowerCase()) ||
-      b.frnCode?.toLowerCase().includes(search.toLowerCase()) ||
-      b.technology?.toLowerCase().includes(search.toLowerCase()),
+      b.batchName?.toLowerCase().includes(query) ||
+      b.frnCode?.toLowerCase().includes(query) ||
+      b.technology?.toLowerCase().includes(query),
   );
+  const totalPages = Math.max(1, Math.ceil(filteredNoAccess.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageStart = (safePage - 1) * PAGE_SIZE;
+  const pagedNoAccess = filteredNoAccess.slice(pageStart, pageStart + PAGE_SIZE);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+    .filter(
+      (p) => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1,
+    )
+    .reduce((acc, p, i, arr) => {
+      if (i > 0 && p - arr[i - 1] > 1) acc.push(`ellipsis-${arr[i - 1]}`);
+      acc.push(p);
+      return acc;
+    }, []);
+
+  function handleSearchChange(value) {
+    setSearch(value);
+    setCurrentPage(1);
+  }
 
   return (
     <DashboardLayout
@@ -306,21 +320,21 @@ export default function MyBatches() {
                   Other Batches
                 </h2>
                 <span className="rounded-full border border-fbs-border bg-fbs-card px-2 py-0.5 text-[10px] font-bold text-gray-400">
-                  {noAccessBatches.length}
+                  {filteredNoAccess.length}
                 </span>
               </div>
 
               {/* Search */}
               {noAccessBatches.length > 0 && (
-                <div className="relative w-full min-w-0 sm:w-56">
+                <div className="relative w-full min-w-0 sm:w-80">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                     <Icon d={ICONS.search} size={13} />
                   </span>
                   <input
                     type="text"
-                    placeholder="Search batches…"
+                    placeholder="Search batch by name or FRN code..."
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-full min-h-11 rounded-lg border border-fbs-border bg-fbs-card py-2 pl-8 pr-3 text-xs text-white placeholder-gray-600 outline-none transition-colors focus:border-fbs-green"
                   />
                 </div>
@@ -362,8 +376,8 @@ export default function MyBatches() {
                   </span>
                 </div>
 
-                <div className="px-5">
-                  {filteredNoAccess.map((b) => (
+                <div className="px-4 md:px-5">
+                  {pagedNoAccess.map((b) => (
                     <NoAccessBatchRow
                       key={b.id}
                       batch={b}
@@ -371,6 +385,50 @@ export default function MyBatches() {
                       requesting={requesting}
                     />
                   ))}
+                </div>
+
+                <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-5">
+                  <p className="text-xs text-gray-600">
+                    Showing {pageStart + 1}–
+                    {Math.min(pageStart + PAGE_SIZE, filteredNoAccess.length)} of{" "}
+                    {filteredNoAccess.length}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage(safePage - 1)}
+                      disabled={safePage === 1}
+                      className="min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30 sm:min-h-0">
+                      Previous
+                    </button>
+                    {pageNumbers.map((p) =>
+                      typeof p === "string" ? (
+                        <span key={p} className="px-1 text-xs text-gray-600">
+                          ...
+                        </span>
+                      ) : (
+                        <button
+                          key={p}
+                          type="button"
+                          onClick={() => setCurrentPage(p)}
+                          className={`flex h-11 min-w-11 items-center justify-center rounded-lg text-xs font-medium transition-colors sm:h-8 sm:min-w-8
+                          ${
+                            safePage === p
+                              ? "bg-fbs-green text-black"
+                              : "border border-fbs-border bg-fbs-dark text-gray-400 hover:text-white"
+                          }`}>
+                          {p}
+                        </button>
+                      ),
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage(safePage + 1)}
+                      disabled={safePage === totalPages}
+                      className="min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30 sm:min-h-0">
+                      Next
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
