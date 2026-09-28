@@ -128,6 +128,8 @@ export default function TrainerDashboard() {
   const [loading, setLoading] = useState(true);
   const [requesting, setRequesting] = useState(null);
   const [toast, setToast] = useState({ msg: '', type: 'success' });
+  const [batchPage, setBatchPage] = useState(1);
+  const BATCH_PAGE_SIZE = 4;
 
   function showToast(msg, type = 'success') {
     setToast({ msg, type });
@@ -167,6 +169,19 @@ export default function TrainerDashboard() {
   function handleMarkAttendance(batch) {
     navigate('/trainer/attendance', { state: { batch } });
   }
+
+  const allBatches = data?.allBatches || [];
+  const batchTotalPages = Math.max(1, Math.ceil(allBatches.length / BATCH_PAGE_SIZE));
+  const safeBatchPage = Math.min(batchPage, batchTotalPages);
+  const batchPageStart = (safeBatchPage - 1) * BATCH_PAGE_SIZE;
+  const pagedBatches = allBatches.slice(batchPageStart, batchPageStart + BATCH_PAGE_SIZE);
+  const batchPageNumbers = Array.from({ length: batchTotalPages }, (_, i) => i + 1)
+    .filter((p) => p === 1 || p === batchTotalPages || Math.abs(p - safeBatchPage) <= 1)
+    .reduce((acc, p, i, arr) => {
+      if (i > 0 && p - arr[i - 1] > 1) acc.push(`ellipsis-${arr[i - 1]}`);
+      acc.push(p);
+      return acc;
+    }, []);
 
   if (loading) {
     return (
@@ -225,7 +240,7 @@ export default function TrainerDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-fbs-border">
-                {data?.allBatches?.map(batch => (
+                {pagedBatches.map(batch => (
                   <AllBatchRow
                     key={batch.id}
                     batch={batch}
@@ -237,7 +252,7 @@ export default function TrainerDashboard() {
             </table>
           </div>
           <div className="divide-y divide-fbs-border md:hidden">
-            {data?.allBatches?.map(batch => (
+            {pagedBatches.map(batch => (
               <div key={batch.id} className="space-y-2 px-4 py-4">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-white">{batch.batchName}</p>
@@ -263,6 +278,46 @@ export default function TrainerDashboard() {
               </div>
             ))}
           </div>
+          {allBatches.length > 0 && (
+            <div className="flex flex-col gap-3 border-t border-fbs-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-5">
+              <p className="text-xs text-gray-600">
+                Showing {batchPageStart + 1}–
+                {Math.min(batchPageStart + BATCH_PAGE_SIZE, allBatches.length)} of {allBatches.length}
+              </p>
+              <div className="flex flex-wrap items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setBatchPage(safeBatchPage - 1)}
+                  disabled={safeBatchPage === 1}
+                  className="min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30 sm:min-h-0">
+                  Previous
+                </button>
+                {batchPageNumbers.map((p) =>
+                  typeof p === 'string' ? (
+                    <span key={p} className="px-1 text-xs text-gray-600">...</span>
+                  ) : (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setBatchPage(p)}
+                      className={`flex h-11 min-w-11 items-center justify-center rounded-lg text-xs font-medium transition-colors sm:h-8 sm:min-w-8
+                      ${safeBatchPage === p
+                        ? 'bg-fbs-green text-black'
+                        : 'border border-fbs-border bg-fbs-dark text-gray-400 hover:text-white'}`}>
+                      {p}
+                    </button>
+                  ),
+                )}
+                <button
+                  type="button"
+                  onClick={() => setBatchPage(safeBatchPage + 1)}
+                  disabled={safeBatchPage === batchTotalPages}
+                  className="min-h-11 rounded-lg border border-fbs-border bg-fbs-dark px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-30 sm:min-h-0">
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -187,7 +187,7 @@ export default function MyBatches() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [toast, setToast] = useState({ msg: "", type: "success" });
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 3;
 
   function showToast(msg, type = "success") {
     setToast({ msg, type });
